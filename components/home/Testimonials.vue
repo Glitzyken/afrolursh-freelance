@@ -35,7 +35,10 @@ const contents = [
         </p>
 
         <div class="flex gap-6 items-center">
-          <!-- <UAvatar size="lg" :src="content.image" :alt="content.name" /> -->
+          <Avatar>
+            <AvatarImage :src="content.image" :alt="content.name" />
+            <AvatarFallback>CN</AvatarFallback>
+          </Avatar>
 
           <div>
             <p class="font-bold">{{ content.name }}</p>
