@@ -8,6 +8,7 @@ export default defineNuxtConfig({
     "@nuxt/image",
     "@vueuse/motion/nuxt",
     "@pinia/nuxt",
+    "nuxt-icon",
   ],
   components: [
     {
