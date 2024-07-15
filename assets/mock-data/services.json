@@ -1,0 +1,52 @@
+[
+  {
+    "_id": "6671fd021ac1af6825d4b1de",
+    "name": "Ghana weaving",
+    "picture": "ujeah4p3dgj6a0xx69xbke-pxu59zqc57jnsij1g3g0yf",
+    "NGN": 1000000,
+    "EUR": 5000,
+    "createdAt": "2024-06-18T21:32:50.566Z",
+    "updatedAt": "2024-06-18T21:32:50.566Z",
+    "__v": 0
+  },
+  {
+    "_id": "6671fe9e1ac1af6825d4b1e0",
+    "name": "Knotless braids",
+    "picture": "bpe3t8smgwjcy04wf8n2z9-n01e3othz1lfu4vp0taz4",
+    "NGN": 1000000,
+    "EUR": 5000,
+    "createdAt": "2024-06-18T21:39:42.986Z",
+    "updatedAt": "2024-06-18T21:39:42.986Z",
+    "__v": 0
+  },
+  {
+    "_id": "6671ff121ac1af6825d4b1e2",
+    "name": "Kinky",
+    "picture": "pj027lg6n62ewwerqfpu9-xgrbvytxxpm4ku9amgy6",
+    "NGN": 1050000,
+    "EUR": 6000,
+    "createdAt": "2024-06-18T21:41:38.164Z",
+    "updatedAt": "2024-06-18T21:41:38.164Z",
+    "__v": 0
+  },
+  {
+    "_id": "6671ff841ac1af6825d4b1e4",
+    "name": "Box braid",
+    "picture": "mougdcsmv4c042wxetj7-tkdancs4i6eisjzxxki7lk",
+    "NGN": 870000,
+    "EUR": 4000,
+    "createdAt": "2024-06-18T21:43:32.385Z",
+    "updatedAt": "2024-06-18T21:43:32.385Z",
+    "__v": 0
+  },
+  {
+    "_id": "667200201ac1af6825d4b1e6",
+    "name": "Goddess braid",
+    "picture": "qu2sxbqa9w7ora1ilnntq-a6ilei47ste1kb8awoe84p",
+    "NGN": 1200000,
+    "EUR": 7000,
+    "createdAt": "2024-06-18T21:46:08.444Z",
+    "updatedAt": "2024-06-18T21:46:08.444Z",
+    "__v": 0
+  }
+]
