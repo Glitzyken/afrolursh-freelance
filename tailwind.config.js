@@ -18,6 +18,7 @@ module.exports = {
         pri: "#9B3922",
         sec: "#333333",
         white: "#FAF9F6",
+        white_2: "#F9F1F1",
         success_2: "#00DA60",
         grey1: "#B4B4B8",
         border: "hsl(var(--border))",

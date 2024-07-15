@@ -1,59 +1,40 @@
 <script setup lang="ts">
 import { z } from "zod";
+import { useForm } from "vee-validate";
 import { toast } from "vue-sonner";
-
-const formData = ref({
-  email: "",
-  password: "",
-});
-
-const errors: any = ref({});
+import { toTypedSchema } from "@vee-validate/zod";
+import { vAutoAnimate } from "@formkit/auto-animate/vue";
+import { Input } from "@/components/ui/input";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 
 const isShowPassword = ref(false);
 const handleShowPassword = () => {
   isShowPassword.value = !isShowPassword.value;
 };
 
-const loginSchema = z.object({
-  email: z.string().email("Please enter a valid email"),
-  password: z.string().min(1, "Please enter your password"),
+const formSchema = toTypedSchema(
+  z.object({
+    email: z.string().email("Please enter a valid email"),
+    password: z.string().min(1, "Please enter your password"),
+  })
+);
+
+const { handleSubmit } = useForm({
+  validationSchema: formSchema,
 });
 
-const validateForm = () => {
-  const result = loginSchema.safeParse(formData.value);
+const onSubmit = handleSubmit((values) => {
+  console.log(values);
 
-  if (!result.success) {
-    errors.value = result.error.errors.reduce((acc, err) => {
-      //@ts-ignore
-      acc[err.path[0]] = err.message;
-      return acc;
-    }, {});
-
-    return false;
-  }
-
-  errors.value = {};
-
-  return true;
-};
-
-const handleSubmit = () => {
-  if (validateForm()) {
-    // Handle successful form submission
-    console.log("Form data:", formData.value);
-
-    toast.success("Logged in successfully");
-  }
-};
-
-const schema = z.object({
-  email: z.string().email("Invalid email"),
-  password: z.string().min(8, "Must be at least 8 characters"),
-});
-
-const state = reactive({
-  email: undefined,
-  password: undefined,
+  toast.success("You submitted the following values:", {
+    description: `${JSON.stringify(values, null, 2)}`,
+  });
 });
 </script>
 
@@ -68,103 +49,59 @@ const state = reactive({
           <p class="font-bold text-3xl mb-2">Welcome back</p>
           <p>Please, enter your details.</p>
 
-          <!-- <UForm :schema="schema" :state="state" class="p-1">
-            <div class="w-full space-y-5">
-              <UFormGroup
-                label="Email Address"
-                name="username"
-                eager-validation
-              >
-                <UInput placeholder="Enter your email address" size="lg" />
-              </UFormGroup>
-              <UFormGroup label="Password" name="password" eager-validation>
-                <UInput placeholder="Enter your password" size="lg">
-                  <template #trailing>
-                    <UButton variant="ghost">
-                      <library-general-icon width="14" height="14" />
-                    </UButton>
-                  </template>
-                </UInput>
-              </UFormGroup>
-            </div>
-            <UButton
-              to="/forgot-password"
-              label="Forgot Password?"
-              color="red"
-              variant="link"
-              class="ml-auto mt-2 flex w-fit"
-            />
+          <form class="mt-10 space-y-6" @submit="onSubmit">
+            <FormField v-slot="{ componentField }" name="email">
+              <FormItem v-auto-animate>
+                <div class="text-left">
+                  <FormLabel>Email</FormLabel>
+                </div>
+                <FormControl>
+                  <Input
+                    class="bg-white_2"
+                    type="text"
+                    placeholder="you@example.com"
+                    v-bind="componentField"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            </FormField>
 
-            <UButton
-              type="submit"
-              label="Login"
-              size="lg"
-              class="mt-14"
-              icon="i-heroicons-arrow-right"
-              block
-              trailing
-            />
-          </UForm> -->
-
-          <!-- <form class="mt-10">
-            <div class="text-left mb-2">
-              <label for="email">Email</label>
-            </div>
-            <input
-              id="email"
-              class="w-full px-4 py-2 rounded bg-white border-2 outline-none"
-              :class="errors.email ? 'border-pri' : 'border-sec'"
-              type="email"
-              v-model="formData.email"
-              @input="validateForm"
-            />
-            <span
-              v-if="errors.email"
-              class="text-xs text-pri mt-2 flex items-start"
-            >
-              <Icon name="iwwa:alert" size="15" />
-              <p>{{ errors.email }}l</p>
-            </span>
-
-            <div class="text-left mt-6 mb-2">
-              <label for="email">Password</label>
-            </div>
-            <div
-              class="flex w-full px-4 py-2 rounded bg-white border-2"
-              :class="errors.password ? 'border-pri' : 'border-sec'"
-            >
-              <input
-                id="password"
-                class="bg-white flex-grow outline-none"
-                :type="isShowPassword ? 'text' : 'password'"
-                v-model="formData.password"
-                @input="validateForm"
-              />
-
-              <span class="cursor-pointer" @click="handleShowPassword">
-                <Icon
-                  v-if="isShowPassword"
-                  name="solar:eye-outline"
-                  size="20"
-                />
-                <Icon v-else name="solar:eye-closed-bold" size="20" />
-              </span>
-            </div>
-            <span
-              v-if="errors.password"
-              class="text-xs text-pri mt-2 flex items-start"
-            >
-              <Icon name="iwwa:alert" size="15" />
-              <p>{{ errors.password }}l</p>
-            </span>
+            <FormField v-slot="{ componentField }" name="password">
+              <FormItem v-auto-animate>
+                <div class="text-left">
+                  <FormLabel>Password</FormLabel>
+                </div>
+                <FormControl class="flex items-center">
+                  <div>
+                    <Input
+                      class="bg-white_2"
+                      :type="isShowPassword ? 'text' : 'password'"
+                      v-bind="componentField"
+                    />
+                    <!-- <span
+                      class="cursor-pointer px-2"
+                      @click="handleShowPassword"
+                    >
+                      <Icon
+                        v-if="isShowPassword"
+                        name="solar:eye-outline"
+                        size="20"
+                      />
+                      <Icon v-else name="solar:eye-closed-bold" size="20" />
+                    </span> -->
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            </FormField>
 
             <ButtonBase
               class="h-10 px-5 py-8x text-sm font-medium mt-10 w-full"
-              @click.prevent="handleSubmit"
             >
               Continue
             </ButtonBase>
-          </form> -->
+          </form>
         </div>
       </div>
       <div class="w-full h-full"></div>
