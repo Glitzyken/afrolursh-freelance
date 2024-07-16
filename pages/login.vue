@@ -57,7 +57,7 @@ const onSubmit = handleSubmit((values) => {
                 </div>
                 <FormControl>
                   <Input
-                    class="bg-white_2"
+                    class="bg-white border-2 border-sec/25"
                     type="text"
                     placeholder="you@example.com"
                     v-bind="componentField"
@@ -75,7 +75,7 @@ const onSubmit = handleSubmit((values) => {
                 <FormControl class="flex items-center">
                   <div>
                     <Input
-                      class="bg-white_2"
+                      class="bg-white border-2 border-sec/25"
                       :type="isShowPassword ? 'text' : 'password'"
                       v-bind="componentField"
                     />
