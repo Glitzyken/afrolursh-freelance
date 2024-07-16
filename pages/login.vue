@@ -13,11 +13,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-const isShowPassword = ref(false);
-const handleShowPassword = () => {
-  isShowPassword.value = !isShowPassword.value;
-};
-
 const formSchema = toTypedSchema(
   z.object({
     email: z.string().email("Please enter a valid email"),
@@ -76,20 +71,9 @@ const onSubmit = handleSubmit((values) => {
                   <div>
                     <Input
                       class="bg-white border-2 border-sec/25"
-                      :type="isShowPassword ? 'text' : 'password'"
+                      type="password"
                       v-bind="componentField"
                     />
-                    <!-- <span
-                      class="cursor-pointer px-2"
-                      @click="handleShowPassword"
-                    >
-                      <Icon
-                        v-if="isShowPassword"
-                        name="solar:eye-outline"
-                        size="20"
-                      />
-                      <Icon v-else name="solar:eye-closed-bold" size="20" />
-                    </span> -->
                   </div>
                 </FormControl>
                 <FormMessage />
