@@ -1,6 +1,6 @@
 import { useAxios } from "~/composables/useAxios";
 import type { APIResponse } from "../types";
-import type { MagicLink, MagicLinkPayload } from "./types";
+import type { Login, LoginPayload, MagicLink, MagicLinkPayload } from "./types";
 import type { AxiosError } from "axios";
 import { isAxiosError } from "axios";
 
@@ -32,6 +32,15 @@ async function sendMagicLink(payload: MagicLinkPayload) {
   }
 }
 
+async function login(payload: LoginPayload) {
+  try {
+    return await http.post<APIResponse<Login>>("/auth/login", payload);
+  } catch (error: any) {
+    return handleError(error);
+  }
+}
+
 export default {
   sendMagicLink,
+  login,
 };

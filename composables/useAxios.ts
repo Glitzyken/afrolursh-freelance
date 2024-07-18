@@ -22,7 +22,7 @@ export const useAxios = () => {
     (config) => {
       const token = getTokenFromConfig(config);
       config.headers.Authorization =
-        "Bearer " + (token || localStorage.getItem("mc-ai-d"));
+        "Bearer " + (token || localStorage.getItem(TOKEN_LOCAL_STORAGE_ID));
 
       return config;
     },

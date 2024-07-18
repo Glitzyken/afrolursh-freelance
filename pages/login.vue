@@ -9,18 +9,32 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { API } from "~/services";
+import { useAuthStore } from "@/store/auth";
+
+const authStore = useAuthStore();
+
+const isLoading = ref(false);
 
 const { handleSubmit } = useForm({
   validationSchema: loginSchema,
 });
 
-const onSubmit = handleSubmit((values) => {
-  console.log(values);
+const onSubmit = handleSubmit(async (values) => {
+  isLoading.value = true;
 
-  successToast(
-    "You submitted the following values:",
-    `${JSON.stringify(values, null, 2)}`
-  );
+  const res = await API.auth.login({
+    email: values.email,
+    password: values.password,
+  });
+
+  isLoading.value = false;
+
+  if (res) {
+    console.log(res.data);
+    authStore.setAuthToken(res.data.result.token);
+    successToast("Logged in successfully");
+  }
 });
 </script>
 
@@ -72,9 +86,15 @@ const onSubmit = handleSubmit((values) => {
             </FormField>
 
             <ButtonBase
+              :isLoading="isLoading"
+              type="submit"
+              loadingText="Please enter your email"
               class="h-10 px-5 py-8x text-sm font-medium mt-10 w-full"
             >
               Continue
+              <template #spinner>
+                <SpinnerSm />
+              </template>
             </ButtonBase>
           </form>
         </div>

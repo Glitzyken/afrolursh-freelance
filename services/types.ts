@@ -10,4 +10,15 @@ export type User = {
   firstName: string;
   lastName: string;
   email: string;
+  phone: string;
+  photo: string;
+  role: string;
+  languages: string[];
+  address: string;
+  city: string;
+  state: string;
+  country: string;
+  bio: string;
+  isOnboard: boolean;
+  createdAt: string;
 };
