@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useAuthStore } from "@/store/auth";
-import { toast } from "vue-sonner";
 import { useForm } from "vee-validate";
 
 import {
@@ -11,17 +10,23 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { API } from "~/services";
+
+const isLoading = ref(false);
 
 const { handleSubmit } = useForm({
   validationSchema: signupSchema,
 });
 
-const onSubmit = handleSubmit((values) => {
-  console.log(values);
+const onSubmit = handleSubmit(async (values) => {
+  isLoading.value = true;
 
-  toast.success("You submitted the following values:", {
-    description: `${JSON.stringify(values, null, 2)}`,
-  });
+  const res = await API.auth.sendMagicLink({ email: values.email });
+  isLoading.value = false;
+
+  if (res) {
+    successToast("Link successfully sent");
+  }
 });
 </script>
 
@@ -83,8 +88,17 @@ const onSubmit = handleSubmit((values) => {
             </FormItem>
           </FormField>
 
-          <ButtonBase class="h-10 px-5 py-8x text-sm font-medium mt-10 w-full">
-            Sign up and book an appointment
+          <ButtonBase
+            :isLoading="isLoading"
+            type="submit"
+            loadingText="Please enter your email"
+            class="h-10 px-5 py-8x text-sm font-medium mt-10 w-full"
+          >
+            Send link
+
+            <template #spinner>
+              <SpinnerSm />
+            </template>
           </ButtonBase>
         </form>
 

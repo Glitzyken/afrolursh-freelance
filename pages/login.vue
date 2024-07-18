@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useForm } from "vee-validate";
-import { toast } from "vue-sonner";
 import { vAutoAnimate } from "@formkit/auto-animate/vue";
 import { Input } from "@/components/ui/input";
 import {
@@ -18,9 +17,10 @@ const { handleSubmit } = useForm({
 const onSubmit = handleSubmit((values) => {
   console.log(values);
 
-  toast.success("You submitted the following values:", {
-    description: `${JSON.stringify(values, null, 2)}`,
-  });
+  successToast(
+    "You submitted the following values:",
+    `${JSON.stringify(values, null, 2)}`
+  );
 });
 </script>
 
