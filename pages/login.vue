@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import { z } from "zod";
 import { useForm } from "vee-validate";
 import { toast } from "vue-sonner";
-import { toTypedSchema } from "@vee-validate/zod";
 import { vAutoAnimate } from "@formkit/auto-animate/vue";
 import { Input } from "@/components/ui/input";
 import {
@@ -13,15 +11,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-const formSchema = toTypedSchema(
-  z.object({
-    email: z.string().email("Please enter a valid email"),
-    password: z.string().min(1, "Please enter your password"),
-  })
-);
-
 const { handleSubmit } = useForm({
-  validationSchema: formSchema,
+  validationSchema: loginSchema,
 });
 
 const onSubmit = handleSubmit((values) => {
