@@ -35,10 +35,7 @@ const placeBooking = () => {
           autem quibusdam, sint dolore neque officia iste quae
         </p>
 
-        <ButtonBase
-          @click="placeBooking"
-          class="h-10 px-5 py-8x text-sm font-medium"
-        >
+        <ButtonBase @click="placeBooking">
           <Icon
             name="solar:play-bold"
             size="18"

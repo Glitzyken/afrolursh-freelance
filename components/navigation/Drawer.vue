@@ -1,9 +1,14 @@
 <script setup lang="ts">
 import { useBurgerStore } from "@/store/burger";
+import { useAuthStore } from "~/store/auth";
 
 const burgerStore = useBurgerStore();
 
 const toggleDrawer = () => burgerStore.toggle();
+const openSignupModal = () => {
+  burgerStore.toggle();
+  useAuthStore().isSignupModalOpen = true;
+};
 </script>
 
 <template>
@@ -70,6 +75,15 @@ const toggleDrawer = () => burgerStore.toggle();
           title="Login"
         >
           Log in
+        </NuxtLink>
+      </li>
+      <li @click="openSignupModal">
+        <NuxtLink
+          active-class="link-underline-custom"
+          class="navbar-items"
+          title="Signup"
+        >
+          Signup
         </NuxtLink>
       </li>
     </ul>

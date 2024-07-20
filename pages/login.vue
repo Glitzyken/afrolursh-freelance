@@ -89,7 +89,7 @@ const onSubmit = handleSubmit(async (values) => {
               :isLoading="isLoading"
               type="submit"
               loadingText="Please enter your email"
-              class="h-10 px-5 py-8x text-sm font-medium mt-10 w-full"
+              class="w-full"
             >
               Continue
               <template #spinner>
@@ -97,6 +97,17 @@ const onSubmit = handleSubmit(async (values) => {
               </template>
             </ButtonBase>
           </form>
+
+          <div class="mt-5 text-sm text-center">
+            Don't have an account?
+            <NuxtLink
+              active-class="link-underline-custom"
+              class="navbar-items cursor-pointer"
+              title="Signup"
+              @click="useAuthStore().isSignupModalOpen = true"
+              >Sign up</NuxtLink
+            >
+          </div>
         </div>
       </div>
       <div class="w-full h-full"></div>

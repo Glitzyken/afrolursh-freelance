@@ -3,10 +3,10 @@ import type { User } from "~/services/types";
 
 export const useAuthStore = defineStore("auth", () => {
   const user = ref<User | null>(null);
-  const isLoginModalOpen = ref(false);
+  const isSignupModalOpen = ref(false);
 
-  const toggleLoginModal = () => {
-    isLoginModalOpen.value = !isLoginModalOpen.value;
+  const toggleSignupModal = () => {
+    isSignupModalOpen.value = !isSignupModalOpen.value;
   };
 
   const setAuthToken = (token: string | null) => {
@@ -17,5 +17,5 @@ export const useAuthStore = defineStore("auth", () => {
     }
   };
 
-  return { isLoginModalOpen, toggleLoginModal, user, setAuthToken };
+  return { isSignupModalOpen, toggleSignupModal, user, setAuthToken };
 });

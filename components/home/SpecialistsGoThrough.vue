@@ -73,10 +73,7 @@ const becomeSpecialist = () => console.log("Joining...");
       </div>
     </div>
 
-    <ButtonBase
-      @click="becomeSpecialist"
-      class="h-10 px-5 py-8x text-sm font-medium"
-    >
+    <ButtonBase @click="becomeSpecialist">
       <Icon
         name="solar:user-check-bold"
         size="20"

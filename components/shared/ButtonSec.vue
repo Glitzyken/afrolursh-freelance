@@ -47,7 +47,7 @@ withDefaults(defineProps<ButtonProps>(), {
       </span>
     </span>
   </button>
-  <nuxt-link :to="link" v-bind="$attrs" class="btn-sec cursor-pointer" v v-else>
+  <nuxt-link :to="link" v-bind="$attrs" class="btn-sec cursor-pointer" v-else>
     <span class="relative z-30">
       <slot />
     </span>

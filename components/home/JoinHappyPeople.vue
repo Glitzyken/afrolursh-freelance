@@ -22,10 +22,7 @@ import { useAuthStore } from "@/store/auth";
           consequuntur maxime.
         </p>
 
-        <ButtonBase
-          @click="useAuthStore().isLoginModalOpen = true"
-          class="h-10 px-5 py-8x text-sm font-medium"
-        >
+        <ButtonBase @click="useAuthStore().isSignupModalOpen = true">
           Join the league
         </ButtonBase>
       </div>

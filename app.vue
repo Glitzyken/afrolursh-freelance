@@ -111,7 +111,7 @@ useHead({
   </Html>
   <div class="mx-5 md:mx-10 lg:mx-32 text-sec">
     <ClientOnly>
-      <Toaster richColors closeButton position="bottom-right" />
+      <Toaster richColors closeButton position="top-right" />
     </ClientOnly>
     <SignupModal />
     <Navbar />

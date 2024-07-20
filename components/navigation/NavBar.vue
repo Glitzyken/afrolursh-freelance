@@ -59,23 +59,13 @@ const useLoggedIn = () => {
       <ClientOnly>
         <div class="hidden md:flex gap-6">
           <div v-if="useLoggedIn()" class="flex items-center">
-            <ButtonBase
-              as="link"
-              class="h-10 px-5 text-sm font-medium transition-all ease-in-out"
-            >
-              Account
-            </ButtonBase>
+            <ButtonBase as="link"> Account </ButtonBase>
           </div>
           <div v-if="!useLoggedIn()" class="flex items-center gap-8x">
-            <NuxtLink to="/login" title="Login">
-              <ButtonSec class="h-10 bg-sec px-5 py-8x text-sm font-medium">
-                Log in
-              </ButtonSec>
-            </NuxtLink>
-            <ButtonBase
-              @click="useAuthStore().isLoginModalOpen = true"
-              class="h-10 px-5 py-8x text-sm font-medium"
-            >
+            <ButtonSec as="link" link="/login" title="Login">
+              Log in
+            </ButtonSec>
+            <ButtonBase @click="useAuthStore().isSignupModalOpen = true">
               Sign up
             </ButtonBase>
           </div>

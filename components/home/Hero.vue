@@ -31,10 +31,7 @@ const placeBooking = () => {
         for your hair needs.
       </p>
 
-      <ButtonBase
-        @click="placeBooking"
-        class="h-10 px-5 py-8x text-sm font-medium"
-      >
+      <ButtonBase @click="placeBooking">
         Book a specialist instantly
       </ButtonBase>
     </div>
