@@ -62,7 +62,7 @@ const useLoggedIn = () => {
             <ButtonBase as="link"> Account </ButtonBase>
           </div>
           <div v-if="!useLoggedIn()" class="flex items-center gap-8x">
-            <ButtonSec as="link" link="/login" title="Login">
+            <ButtonSec as="link" link="/auth/login" title="Login">
               Log in
             </ButtonSec>
             <ButtonBase @click="useAuthStore().isSignupModalOpen = true">

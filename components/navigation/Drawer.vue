@@ -69,7 +69,7 @@ const openSignupModal = () => {
       </li>
       <li @click="toggleDrawer">
         <NuxtLink
-          to="/login"
+          to="/auth/login"
           active-class="link-underline-custom"
           class="navbar-items"
           title="Login"

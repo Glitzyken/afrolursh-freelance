@@ -98,6 +98,9 @@ input:-webkit-autofill:active {
   .h3 {
     @apply text-lg lg:text-xl font-bold;
   }
+  .short-title {
+    @apply font-bold text-3xl mb-2
+  }
   .section {
     @apply mb-24;
   }
