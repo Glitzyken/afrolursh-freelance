@@ -13,17 +13,15 @@ import {
 import { API } from "~/services";
 
 const authStore = useAuthStore();
+
 const isLoading = ref(false);
 const emailInput = ref("");
 
 onBeforeMount(() => {
-  const route = useRoute();
-  const router = useRouter();
-
-  const token = route.query?.token as string;
+  const token = useRoute().query?.token as string;
 
   if (!token) {
-    router.replace({ path: "/" });
+    useRouter().replace({ path: "/" });
     useAuthStore().isSignupModalOpen = true;
     return;
   }
@@ -31,7 +29,7 @@ onBeforeMount(() => {
   const { exp, email } = parseJwt(token);
 
   if (exp * 1000 <= new Date().getTime()) {
-    router.replace({ path: "/" });
+    useRouter().replace({ path: "/" });
     useAuthStore().isSignupModalOpen = true;
     return;
   }
@@ -46,19 +44,26 @@ const { handleSubmit } = useForm({
 const onSubmit = handleSubmit(async (values) => {
   isLoading.value = true;
 
-  console.log(values);
+  const res = await API.auth.completeSignup(
+    {
+      firstName: values.firstName,
+      lastName: values.lastName,
+      email: values.email,
+      password: values.password,
+    },
+    useRoute().query?.token as string
+  );
 
-  // const res = await API.auth.login({
-  //   email: values.email,
-  //   password: values.password,
-  // });
+  isLoading.value = false;
 
-  // isLoading.value = false;
+  if (res) {
+    successToast("Signed up successfully");
 
-  // if (res) {
-  //   authStore.setAuthToken(res.data.result.token);
-  //   successToast("Logged in successfully");
-  // }
+    setTimeout(() => {
+      // useRouter().push({ path: "/onboarding/start" });
+      useRouter().replace({ path: "/onboarding/start" });
+    }, 2000);
+  }
 });
 </script>
 
@@ -107,7 +112,7 @@ const onSubmit = handleSubmit(async (values) => {
           </FormItem>
         </FormField>
 
-        <FormField v-slot="{ componentField }" name="email">
+        <FormField v-slot="{ componentField }" name="email" :value="emailInput">
           <FormItem v-auto-animate>
             <div class="text-left">
               <FormLabel>Email</FormLabel>
@@ -117,7 +122,9 @@ const onSubmit = handleSubmit(async (values) => {
                 class="bg-white border-2 border-sec/25"
                 type="email"
                 placeholder="you@example.com"
+                disabled
                 v-bind="componentField"
+                v-model="emailInput"
               />
             </FormControl>
             <FormMessage />
