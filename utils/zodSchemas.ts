@@ -19,6 +19,7 @@ export const completeSignupSchema = toTypedSchema(
     firstName: z.string(),
     lastName: z.string(),
     email: z.string().email("Please enter a valid email"),
+    phone: z.string().optional(),
     password: z.string().min(8, "Password must be at least 8 characters"),
   })
 );

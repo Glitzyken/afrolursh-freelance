@@ -13,7 +13,7 @@ body {
 }
 
 /* Apply your desired background color */
-input[type="email"] {
+input {
   background-color: #FAF9F6;
 }
 
