@@ -11,6 +11,10 @@ import {
 } from "@/components/ui/form";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
+definePageMeta({
+  middleware: "auth",
+});
+
 const isLoading = ref(false);
 const role = ref("individual");
 
@@ -31,6 +35,8 @@ const { handleSubmit } = useForm({
 const onSubmit = handleSubmit((values) => {
   if (!values.role) values.role = "individual";
   console.log(values);
+
+  // useRouter().push({ path: "/onboarding/specialty" });
 });
 </script>
 

@@ -2,20 +2,38 @@ import { defineStore } from "pinia";
 import type { User } from "~/services/types";
 
 export const useAuthStore = defineStore("auth", () => {
-  const user = ref<User | null>(null);
+  let user = ref<User | null>(null);
   const isSignupModalOpen = ref(false);
 
   const toggleSignupModal = () => {
     isSignupModalOpen.value = !isSignupModalOpen.value;
   };
 
-  const setAuthToken = (token: string | null) => {
-    if (token) {
-      localStorage.setItem(TOKEN_LOCAL_STORAGE_ID, token);
-    } else {
-      localStorage.removeItem(TOKEN_LOCAL_STORAGE_ID);
-    }
+  const setAuthToken = (token: string) => {
+    localStorage.setItem(TOKEN_LOCAL_STORAGE_ID, token);
   };
 
-  return { isSignupModalOpen, toggleSignupModal, user, setAuthToken };
+  const unsetAuthToken = () => {
+    localStorage.removeItem(TOKEN_LOCAL_STORAGE_ID);
+  };
+
+  const getAuthTokenFromLocalStorage = () => {
+    return localStorage.getItem(TOKEN_LOCAL_STORAGE_ID);
+  };
+
+  const logOut = () => {
+    // @ts-ignore
+    user = null;
+    unsetAuthToken();
+    useRouter().replace({ path: "/auth/login" });
+  };
+
+  return {
+    isSignupModalOpen,
+    toggleSignupModal,
+    user,
+    setAuthToken,
+    getAuthTokenFromLocalStorage,
+    logOut,
+  };
 });

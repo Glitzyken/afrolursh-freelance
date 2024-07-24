@@ -37,10 +37,7 @@ const onSubmit = handleSubmit(async (values) => {
   isLoading.value = true;
   values.phone = phoneNumber.value;
 
-  console.log(values);
-  console.log(phoneNumberInputResults.value);
-
-  const res = await API.auth.completeSignup(
+  const user = await API.auth.completeSignup(
     {
       firstName: values.firstName,
       lastName: values.lastName,
@@ -53,15 +50,22 @@ const onSubmit = handleSubmit(async (values) => {
 
   isLoading.value = false;
 
-  if (res) {
-    successToast("Signed up successfully");
+  if (user) {
+    const result = await API.auth.login({
+      email: values.email,
+      password: values.password,
+    });
 
-    authStore.user = res.data.result;
+    if (result) {
+      authStore.user = result.data?.result?.user;
+      authStore.setAuthToken(result.data?.result?.token);
 
-    setTimeout(() => {
-      // useRouter().push({ path: "/onboarding/start" });
-      useRouter().replace({ path: "/onboarding/start" });
-    }, 2000);
+      successToast("Signed up successfully");
+
+      setTimeout(() => {
+        useRouter().replace({ path: "/onboarding/start" });
+      }, 2000);
+    }
   }
 });
 </script>
