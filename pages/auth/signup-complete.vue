@@ -15,32 +15,19 @@ import { API } from "~/services";
 import { countryCodesNotSupported } from "~/assets/data/countryCodes";
 
 const authStore = useAuthStore();
+const emailInput = ref("");
+
+definePageMeta({
+  middleware: "auth",
+});
 
 const isLoading = ref(false);
-const emailInput = ref("");
 const phoneNumber = ref("");
 const countryCode = ref("GB");
 const phoneNumberInputResults = ref();
 
-onBeforeMount(() => {
-  const token = useRoute().query?.token as string;
-
-  if (!token) {
-    useRouter().replace({ path: "/" });
-    useAuthStore().isSignupModalOpen = true;
-    return;
-  }
-
-  const { exp, email } = parseJwt(token);
-
-  if (exp * 1000 <= new Date().getTime()) {
-    useRouter().replace({ path: "/" });
-    useAuthStore().isSignupModalOpen = true;
-    return;
-  }
-
-  emailInput.value = email;
-});
+const email = useRoute().query?.email as string;
+emailInput.value = email;
 
 const { handleSubmit } = useForm({
   validationSchema: completeSignupSchema,
