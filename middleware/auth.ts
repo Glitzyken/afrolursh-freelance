@@ -20,6 +20,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
     if (!result) return authStore.logOut();
 
     authStore.user = result?.data?.result;
+    authStore.isLoggedIn = true;
 
     if (to.path === "/auth/signup-complete/") {
       const token = to.query?.token as string;
@@ -39,6 +40,10 @@ export default defineNuxtRouteMiddleware(async (to) => {
       }
 
       to.query.email = email;
+    }
+
+    if (to.path === "/auth/login") {
+      return navigateTo("/");
     }
 
     if (to.path === "/onboarding/start") {

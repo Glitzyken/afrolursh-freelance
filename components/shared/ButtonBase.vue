@@ -23,7 +23,7 @@ export interface ButtonProps {
    */
   type?: "button" | "reset" | "submit";
   as?: "button" | "link";
-  to?: string;
+  link?: string;
 }
 withDefaults(defineProps<ButtonProps>(), {
   isActive: true,
@@ -55,7 +55,7 @@ withDefaults(defineProps<ButtonProps>(), {
       </span>
     </span>
   </button>
-  <nuxt-link :href="to" v-bind="$attrs" class="btn-main cursor-pointer" v-else>
+  <nuxt-link :to="link" v-bind="$attrs" class="btn-main cursor-pointer" v-else>
     <span class="relative z-30">
       <slot />
     </span>

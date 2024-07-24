@@ -13,6 +13,10 @@ import { API } from "~/services";
 import { useAuthStore } from "@/store/auth";
 import type { User } from "~/services/types";
 
+definePageMeta({
+  middleware: "auth",
+});
+
 const authStore = useAuthStore();
 
 const isLoading = ref(false);
@@ -36,6 +40,7 @@ const onSubmit = handleSubmit(async (values) => {
     const data = await API.user.getMe();
 
     authStore.user = data?.data?.result as User;
+    authStore.isLoggedIn = true;
 
     successToast("Logged in successfully");
 

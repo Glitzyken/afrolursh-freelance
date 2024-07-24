@@ -3,11 +3,12 @@ import { useBurgerStore } from "@/store/burger";
 import { useAuthStore } from "@/store/auth";
 
 const burgerStore = useBurgerStore();
+const authStore = useAuthStore();
 
 const toggleDrawer = () => burgerStore.toggle();
 
 const useLoggedIn = () => {
-  return false;
+  return authStore.isLoggedIn;
 };
 </script>
 
@@ -59,13 +60,15 @@ const useLoggedIn = () => {
       <ClientOnly>
         <div class="hidden md:flex gap-6">
           <div v-if="useLoggedIn()" class="flex items-center">
-            <ButtonBase as="link"> Account </ButtonBase>
+            <ButtonBase as="link" link="/dashboard" title="Dashboard">
+              Account
+            </ButtonBase>
           </div>
           <div v-if="!useLoggedIn()" class="flex items-center gap-8x">
             <ButtonSec as="link" link="/auth/login" title="Login">
               Log in
             </ButtonSec>
-            <ButtonBase @click="useAuthStore().isSignupModalOpen = true">
+            <ButtonBase @click="authStore.isSignupModalOpen = true">
               Sign up
             </ButtonBase>
           </div>

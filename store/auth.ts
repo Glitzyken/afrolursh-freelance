@@ -4,6 +4,7 @@ import type { User } from "~/services/types";
 export const useAuthStore = defineStore("auth", () => {
   let user = ref<User | null>(null);
   const isSignupModalOpen = ref(false);
+  const isLoggedIn = ref(false);
 
   const toggleSignupModal = () => {
     isSignupModalOpen.value = !isSignupModalOpen.value;
@@ -22,16 +23,17 @@ export const useAuthStore = defineStore("auth", () => {
   };
 
   const logOut = () => {
-    // @ts-ignore
-    user = null;
+    user.value = null;
+    isLoggedIn.value = false;
     unsetAuthToken();
     useRouter().replace({ path: "/auth/login" });
   };
 
   return {
-    isSignupModalOpen,
-    toggleSignupModal,
     user,
+    isSignupModalOpen,
+    isLoggedIn,
+    toggleSignupModal,
     setAuthToken,
     getAuthTokenFromLocalStorage,
     logOut,
