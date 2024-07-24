@@ -68,14 +68,14 @@ const onSubmit = handleSubmit(async (values) => {
 
 <template>
   <section class="section mt-10">
-    <div class="md:w-2/4 lg:w-1/4 m-auto">
+    <div class="w-96 m-auto">
       <h1 class="text-center short-title">
         Welcome! <br />
         Let's get to know you
       </h1>
     </div>
 
-    <div class="md:w-2/4 lg:w-1/4 m-auto">
+    <div class="w-96 m-auto">
       <ClientOnly>
         <form class="mt-10 space-y-4" @submit="onSubmit">
           <FormField v-slot="{ componentField }" name="firstName">
@@ -187,9 +187,9 @@ const onSubmit = handleSubmit(async (values) => {
             </template>
           </ButtonBase>
         </form>
-      </ClientOnly>
 
-      <ButtonSec as="link" link="/" class="w-full mt-3"> Back </ButtonSec>
+        <ButtonSec as="link" link="/" class="w-full mt-3"> Back </ButtonSec>
+      </ClientOnly>
     </div>
   </section>
 </template>
