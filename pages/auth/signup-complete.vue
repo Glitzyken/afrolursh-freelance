@@ -56,6 +56,8 @@ const onSubmit = handleSubmit(async (values) => {
   if (res) {
     successToast("Signed up successfully");
 
+    authStore.user = res.data.result;
+
     setTimeout(() => {
       // useRouter().push({ path: "/onboarding/start" });
       useRouter().replace({ path: "/onboarding/start" });
