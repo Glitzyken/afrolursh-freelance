@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/form";
 import { API } from "~/services";
 import { useAuthStore } from "@/store/auth";
+import type { User } from "~/services/types";
 
 const authStore = useAuthStore();
 
@@ -32,7 +33,19 @@ const onSubmit = handleSubmit(async (values) => {
 
   if (res) {
     authStore.setAuthToken(res.data.result.token);
+    const data = await API.user.getMe();
+
+    authStore.user = data?.data?.result as User;
+
     successToast("Logged in successfully");
+
+    setTimeout(() => {
+      if (!authStore.user?.isOnboard) {
+        return useRouter().replace({ path: "/onboarding/start" });
+      }
+
+      useRouter().replace({ path: "/dashboard" });
+    }, 2000);
   }
 });
 </script>

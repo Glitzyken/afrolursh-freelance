@@ -19,6 +19,31 @@ export type User = {
   state: string;
   country: string;
   bio: string;
-  isOnboard: boolean;
+  wishList: string[];
+  isPhoneVerified: false;
+  isOnboard: false;
+  isVerifiedSpecialist: true;
+  isActive: true;
+  isRecommended: false;
+  isTopRated: false;
+  slug: string;
+  updatedAt: string;
+  howHeardAboutUs: string;
+  specialistVerifyDate: string;
+  servicesOffered: {
+    identifier: string;
+    name: string;
+    NGN: number;
+    EUR: number;
+    standard: string;
+  }[];
   createdAt: string;
+};
+
+export type Service = {
+  _id: string;
+  id: string;
+  name: string;
+  NGN: number;
+  EUR: number;
 };
