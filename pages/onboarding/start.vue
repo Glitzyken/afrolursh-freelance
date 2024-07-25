@@ -27,7 +27,6 @@ const { handleSubmit } = useForm({
 const onSubmit = handleSubmit(async (values) => {
   isLoading.value = true;
   if (!values.role) values.role = "Individual";
-  console.log(values);
 
   const data = await API.user.updateMe({
     role: values.role,

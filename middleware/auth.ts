@@ -1,39 +1,56 @@
 import { API } from "~/services";
+import { Role } from "~/services/enums";
 import { useAuthStore } from "~/store/auth";
 
-export default defineNuxtRouteMiddleware(async (to) => {
-  const onboardingRoutes = ["/onboarding/start", "/onboarding/services"];
+export default defineNuxtRouteMiddleware(async (to, from) => {
+  const onboardingRoutes = [
+    PAGE.onboarding_start,
+    PAGE.onboarding_services,
+    PAGE.onboarding_address,
+  ];
   const authStore = useAuthStore();
   const router = useRouter();
 
   const handleLogOut = () => {
-    if (to.path !== "/auth/login") {
+    if (to.path !== PAGE.auth_login) {
       authStore.logOut();
     }
   };
 
   const handleNavigateToHome = () => {
-    if (to.path !== "/") {
-      router.replace({ path: "/" });
+    if (to.path !== PAGE.home) {
+      router.replace({ path: PAGE.home });
     }
   };
 
   const handleNavigateToDashboard = () => {
-    if (to.path !== "/dashboard") {
-      router.replace({ path: "/dashboard" });
+    if (to.path !== PAGE.dashboard) {
+      router.replace({ path: PAGE.dashboard });
     }
   };
 
-  const handleNavigateToOnboarding = () => {
-    if (to.path !== "/onboarding/start") {
-      router.replace({ path: "/onboarding/start" });
+  const handleNavigateToOnboardingStart = () => {
+    if (to.path !== PAGE.onboarding_start) {
+      router.replace({ path: PAGE.onboarding_start });
+    }
+  };
+
+  const handleNavigateToOnboardingServices = () => {
+    if (to.path !== PAGE.onboarding_services) {
+      router.replace({ path: PAGE.onboarding_services });
+    }
+  };
+
+  const handleNavigateToOnboardingAddress = () => {
+    if (to.path !== PAGE.onboarding_address) {
+      router.replace({ path: PAGE.onboarding_address });
     }
   };
 
   if (import.meta.client) {
     if (
-      to.path === "/auth/signup-complete" ||
-      to.path === "/auth/signup-complete/"
+      to.path === PAGE.auth_signup_complete ||
+      to.path === PAGE.auth_signup_complete2
     ) {
       const token = to.query?.token as string;
 
@@ -57,7 +74,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
 
     const jwt = authStore.getAuthTokenFromLocalStorage() as string;
 
-    if (!jwt || jwt === "undefined") return handleLogOut();
+    if (!jwt || jwt === "undefined") return handleLogOut(); // TODO Fix this because it causes frequent login
 
     const { exp } = parseJwt(jwt);
 
@@ -73,14 +90,27 @@ export default defineNuxtRouteMiddleware(async (to) => {
     authStore.isLoggedIn = true;
 
     if (onboardingRoutes.includes(to.path)) {
-      if (authStore.user?.isOnboard) {
+      const { user } = authStore;
+
+      if (user?.isOnboard) {
         return handleNavigateToDashboard();
+      }
+
+      if (user?.onboardingStep === 1) {
+        if (user.role === Role.Individual) {
+          return handleNavigateToOnboardingAddress();
+        }
+
+        if (user.role === Role.Specialist) {
+          if (from.path !== PAGE.onboarding_services)
+            return handleNavigateToOnboardingServices();
+        }
       }
     }
 
-    if (to.path === "/dashboard") {
+    if (to.path === PAGE.dashboard) {
       if (!authStore.user?.isOnboard) {
-        return handleNavigateToOnboarding();
+        return handleNavigateToOnboardingStart();
       }
     }
   }
