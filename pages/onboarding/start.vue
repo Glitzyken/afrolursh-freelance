@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import { useForm } from "vee-validate";
-import { toTypedSchema } from "@vee-validate/zod";
-import * as z from "zod";
 import {
   FormControl,
   FormField,
@@ -10,33 +8,38 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { API } from "~/services";
+import { useAuthStore } from "~/store/auth";
+
+const authStore = useAuthStore();
 
 definePageMeta({
   middleware: "auth",
 });
 
 const isLoading = ref(false);
-const role = ref("individual");
-
-const formSchema = toTypedSchema(
-  z.object({
-    role: z
-      .enum(["specialist", "individual"], {
-        required_error: "You need to select a user type.",
-      })
-      .optional(),
-  })
-);
+const role = ref("Individual");
 
 const { handleSubmit } = useForm({
-  validationSchema: formSchema,
+  validationSchema: onboardingStartSchema,
 });
 
-const onSubmit = handleSubmit((values) => {
-  if (!values.role) values.role = "individual";
+const onSubmit = handleSubmit(async (values) => {
+  isLoading.value = true;
+  if (!values.role) values.role = "Individual";
   console.log(values);
 
-  // useRouter().push({ path: "/onboarding/specialty" });
+  const data = await API.user.updateMe({
+    role: values.role,
+    onboardingStep: 1,
+  });
+
+  isLoading.value = false;
+
+  if (data) {
+    authStore.user = data.data?.result;
+    useRouter().push({ path: "/onboarding/services" });
+  }
 });
 </script>
 
@@ -66,12 +69,12 @@ const onSubmit = handleSubmit((values) => {
                   <div
                     class="p-5 flex gap-4 rounded-md"
                     :class="
-                      role === 'specialist' ? 'bg-pri/25' : 'border border-sec'
+                      role === 'Specialist' ? 'bg-pri/25' : 'border border-sec'
                     "
                   >
                     <div>
                       <FormControl>
-                        <RadioGroupItem value="specialist" />
+                        <RadioGroupItem value="Specialist" />
                       </FormControl>
                     </div>
                     <FormLabel>
@@ -98,12 +101,12 @@ const onSubmit = handleSubmit((values) => {
                   <div
                     class="p-5 flex gap-4 rounded-md"
                     :class="
-                      role === 'individual' ? 'bg-pri/25' : 'border border-sec'
+                      role === 'Individual' ? 'bg-pri/25' : 'border border-sec'
                     "
                   >
                     <div>
                       <FormControl>
-                        <RadioGroupItem value="individual" />
+                        <RadioGroupItem value="Individual" />
                       </FormControl>
                     </div>
                     <FormLabel>

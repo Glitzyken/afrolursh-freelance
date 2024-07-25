@@ -2,6 +2,7 @@ import { API } from "~/services";
 import { useAuthStore } from "~/store/auth";
 
 export default defineNuxtRouteMiddleware(async (to) => {
+  const onboardingRoutes = ["/onboarding/start", "/onboarding/services"];
   const authStore = useAuthStore();
   const router = useRouter();
 
@@ -71,7 +72,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
     authStore.user = result?.data?.result;
     authStore.isLoggedIn = true;
 
-    if (to.path === "/onboarding/start") {
+    if (onboardingRoutes.includes(to.path)) {
       if (authStore.user?.isOnboard) {
         return handleNavigateToDashboard();
       }

@@ -30,6 +30,7 @@ export type User = {
   updatedAt: string;
   howHeardAboutUs: string;
   specialistVerifyDate: string;
+  onboardingStep: number;
   servicesOffered: {
     identifier: string;
     name: string;

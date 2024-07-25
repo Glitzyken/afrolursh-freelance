@@ -23,3 +23,13 @@ export const completeSignupSchema = toTypedSchema(
     password: z.string().min(8, "Password must be at least 8 characters"),
   })
 );
+
+export const onboardingStartSchema = toTypedSchema(
+  z.object({
+    role: z
+      .enum(["Specialist", "Individual"], {
+        required_error: "You need to select a user type.",
+      })
+      .optional(),
+  })
+);
