@@ -1,32 +1,43 @@
 import { API } from "~/services";
 import { useAuthStore } from "~/store/auth";
 
-const authStore = useAuthStore();
-
 export default defineNuxtRouteMiddleware(async (to) => {
-  if (import.meta.client) {
-    const jwt = authStore.getAuthTokenFromLocalStorage() as string;
+  const authStore = useAuthStore();
+  const router = useRouter();
 
-    if (!jwt || jwt === "undefined") return authStore.logOut();
-
-    const { exp } = parseJwt(jwt);
-
-    if (exp * 1000 <= new Date().getTime()) {
-      return authStore.logOut();
+  const handleLogOut = () => {
+    if (to.path !== "/auth/login") {
+      authStore.logOut();
     }
+  };
 
-    const result = await API.user.getMe();
+  const handleNavigateToHome = () => {
+    if (to.path !== "/") {
+      router.replace({ path: "/" });
+    }
+  };
 
-    if (!result) return authStore.logOut();
+  const handleNavigateToDashboard = () => {
+    if (to.path !== "/dashboard") {
+      router.replace({ path: "/dashboard" });
+    }
+  };
 
-    authStore.user = result?.data?.result;
-    authStore.isLoggedIn = true;
+  const handleNavigateToOnboarding = () => {
+    if (to.path !== "/onboarding/start") {
+      router.replace({ path: "/onboarding/start" });
+    }
+  };
 
-    if (to.path === "/auth/signup-complete/") {
+  if (import.meta.client) {
+    if (
+      to.path === "/auth/signup-complete" ||
+      to.path === "/auth/signup-complete/"
+    ) {
       const token = to.query?.token as string;
 
       if (!token) {
-        navigateTo("/");
+        handleNavigateToHome();
         authStore.isSignupModalOpen = true;
         return;
       }
@@ -34,21 +45,41 @@ export default defineNuxtRouteMiddleware(async (to) => {
       const { exp, email } = parseJwt(token);
 
       if (exp * 1000 <= new Date().getTime()) {
-        navigateTo("/");
+        handleNavigateToHome();
         authStore.isSignupModalOpen = true;
         return;
       }
 
       to.query.email = email;
+      return;
     }
 
-    if (to.path === "/auth/login") {
-      return navigateTo("/");
+    const jwt = authStore.getAuthTokenFromLocalStorage() as string;
+
+    if (!jwt || jwt === "undefined") return handleLogOut();
+
+    const { exp } = parseJwt(jwt);
+
+    if (exp * 1000 <= new Date().getTime()) {
+      return handleLogOut();
     }
+
+    const result = await API.user.getMe();
+
+    if (!result) return handleLogOut();
+
+    authStore.user = result?.data?.result;
+    authStore.isLoggedIn = true;
 
     if (to.path === "/onboarding/start") {
       if (authStore.user?.isOnboard) {
-        return navigateTo("/dashboard");
+        return handleNavigateToDashboard();
+      }
+    }
+
+    if (to.path === "/dashboard") {
+      if (!authStore.user?.isOnboard) {
+        return handleNavigateToOnboarding();
       }
     }
   }

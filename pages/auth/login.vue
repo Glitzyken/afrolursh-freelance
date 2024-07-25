@@ -13,10 +13,6 @@ import { API } from "~/services";
 import { useAuthStore } from "@/store/auth";
 import type { User } from "~/services/types";
 
-definePageMeta({
-  middleware: "auth",
-});
-
 const authStore = useAuthStore();
 
 const isLoading = ref(false);
