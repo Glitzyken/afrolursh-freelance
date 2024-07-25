@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { h } from "vue";
+import { toTypedSchema } from "@vee-validate/zod";
+import * as z from "zod";
 import { useForm } from "vee-validate";
 import {
   FormControl,
@@ -6,10 +9,14 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  FormDescription,
 } from "@/components/ui/form";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { API } from "~/services";
 import { useAuthStore } from "~/store/auth";
+
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 
 definePageMeta({
   middleware: "auth",
@@ -20,26 +27,170 @@ const authStore = useAuthStore();
 const isLoading = ref(false);
 const role = ref("Individual");
 
+const items = [
+  {
+    id: "recents",
+    label: "Recents",
+  },
+  {
+    id: "home",
+    label: "Home",
+  },
+  {
+    id: "applications",
+    label: "Applications",
+  },
+  {
+    id: "desktop",
+    label: "Desktop",
+  },
+  {
+    id: "downloads",
+    label: "Downloads",
+  },
+  {
+    id: "documents",
+    label: "Documents",
+  },
+  {
+    id: "recents",
+    label: "Recents",
+  },
+  {
+    id: "home",
+    label: "Home",
+  },
+  {
+    id: "applications",
+    label: "Applications",
+  },
+  {
+    id: "desktop",
+    label: "Desktop",
+  },
+  {
+    id: "downloads",
+    label: "Downloads",
+  },
+  {
+    id: "documents",
+    label: "Documents",
+  },
+  {
+    id: "recents",
+    label: "Recents",
+  },
+  {
+    id: "home",
+    label: "Home",
+  },
+  {
+    id: "applications",
+    label: "Applications",
+  },
+  {
+    id: "desktop",
+    label: "Desktop",
+  },
+  {
+    id: "downloads",
+    label: "Downloads",
+  },
+  {
+    id: "documents",
+    label: "Documents",
+  },
+  {
+    id: "recents",
+    label: "Recents",
+  },
+  {
+    id: "home",
+    label: "Home",
+  },
+  {
+    id: "applications",
+    label: "Applications",
+  },
+  {
+    id: "desktop",
+    label: "Desktop",
+  },
+  {
+    id: "downloads",
+    label: "Downloads",
+  },
+  {
+    id: "documents",
+    label: "Documents",
+  },
+  {
+    id: "recents",
+    label: "Recents",
+  },
+  {
+    id: "home",
+    label: "Home",
+  },
+  {
+    id: "applications",
+    label: "Applications",
+  },
+  {
+    id: "desktop",
+    label: "Desktop",
+  },
+  {
+    id: "downloads",
+    label: "Downloads",
+  },
+  {
+    id: "documents",
+    label: "Documents",
+  },
+  {
+    id: "recents",
+    label: "Recents",
+  },
+  {
+    id: "home",
+    label: "Home",
+  },
+  {
+    id: "applications",
+    label: "Applications",
+  },
+  {
+    id: "desktop",
+    label: "Desktop",
+  },
+  {
+    id: "downloads",
+    label: "Downloads",
+  },
+  {
+    id: "documents",
+    label: "Documents",
+  },
+] as const;
+
+const formSchema = toTypedSchema(
+  z.object({
+    items: z.array(z.string()).refine((value) => value.some((item) => item), {
+      message: "You have to select at least one item.",
+    }),
+  })
+);
+
 const { handleSubmit } = useForm({
-  validationSchema: onboardingStartSchema,
+  validationSchema: formSchema,
+  initialValues: {
+    items: ["recents", "home"],
+  },
 });
 
-const onSubmit = handleSubmit(async (values) => {
-  isLoading.value = true;
-  if (!values.role) values.role = "Individual";
+const onSubmit = handleSubmit((values) => {
   console.log(values);
-
-  const data = await API.user.updateMe({
-    role: values.role,
-    onboardingStep: 1,
-  });
-
-  isLoading.value = false;
-
-  if (data) {
-    authStore.user = data.data?.result;
-    useRouter().push({ path: "/onboarding/services" });
-  }
 });
 
 const handleGoBack = () => {
@@ -48,7 +199,7 @@ const handleGoBack = () => {
 </script>
 
 <template>
-  <section class="section mt-10 w-96 m-auto">
+  <section class="section mt-10 w-full md:w-3/4 lg:w-2/4 m-auto">
     <h1 class="text-center short-title">
       Nice to meet you! <br />
       What's your specialty?
@@ -59,80 +210,43 @@ const handleGoBack = () => {
     </p>
 
     <ClientOnly>
-      <form
-        v-motion-slide-visible-once-left
-        class="mt-10 space-y-6"
-        @submit="onSubmit"
-      >
-        <FormField v-slot="{ componentField }" type="radio" name="role">
-          <FormItem class="space-y-3">
-            <FormControl>
-              <RadioGroup
-                class="flex flex-col space-y-1"
-                v-bind="componentField"
-                v-model="role"
-                :default-value="role"
+      <form class="mt-10" @submit="onSubmit">
+        <div class="max-h-96 overflow-scroll overflow-x-hidden p-2">
+          <FormField name="items">
+            <FormItem class="flex flex-wrap justify-left items-end gap-4">
+              <FormField
+                v-for="item in items"
+                v-slot="{ value, handleChange }"
+                :key="item.id"
+                type="checkbox"
+                :value="item.id"
+                :unchecked-value="false"
+                name="items"
               >
-                <FormItem class="flex items-center space-y-0 gap-x-3">
-                  <div
-                    class="p-5 flex gap-4 rounded-md"
-                    :class="
-                      role === 'Specialist' ? 'bg-pri/25' : 'border border-sec'
-                    "
-                  >
-                    <div>
-                      <FormControl>
-                        <RadioGroupItem value="Specialist" />
-                      </FormControl>
-                    </div>
-                    <FormLabel>
-                      <div class="cursor-pointer">
-                        <p class="text-xl font-bold">Braids</p>
-
-                        <p class="leading-5">
-                          Mentor people in tech, grow your network and create a
-                          great legacy in a global community
-                        </p>
-                      </div>
-                    </FormLabel>
-                  </div>
+                <FormItem
+                  class="flex flex-row items-start space-x-3 space-y-0 bg-pri/25 p-5 rounded-md"
+                >
+                  <FormControl>
+                    <Checkbox
+                      :checked="value.includes(item.id)"
+                      @update:checked="handleChange"
+                    />
+                  </FormControl>
+                  <FormLabel class="font-normal">
+                    {{ item.label }}
+                  </FormLabel>
                 </FormItem>
-
-                <FormItem class="flex items-center space-y-0 gap-x-3">
-                  <div
-                    class="p-5 flex gap-4 rounded-md"
-                    :class="
-                      role === 'Individual' ? 'bg-pri/25' : 'border border-sec'
-                    "
-                  >
-                    <div>
-                      <FormControl>
-                        <RadioGroupItem value="Individual" />
-                      </FormControl>
-                    </div>
-                    <FormLabel>
-                      <div class="cursor-pointer">
-                        <p class="text-xl font-bold">Ghana weaving</p>
-
-                        <p class="leading-5">
-                          Mentor people in tech, grow your network and create a
-                          great legacy in a global community
-                        </p>
-                      </div>
-                    </FormLabel>
-                  </div>
-                </FormItem>
-              </RadioGroup>
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        </FormField>
+              </FormField>
+              <FormMessage />
+            </FormItem>
+          </FormField>
+        </div>
 
         <ButtonBase
           :isLoading="isLoading"
           type="submit"
           loadingText="Please enter your email"
-          class="w-full"
+          class="w-full mt-10"
         >
           Continue
           <template #spinner>
