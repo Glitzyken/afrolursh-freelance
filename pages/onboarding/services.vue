@@ -87,14 +87,7 @@ const handleGoBack = () => {
                     </div>
                     <FormLabel>
                       <div class="cursor-pointer">
-                        <p class="text-xl font-bold">
-                          Join as a specialist
-                          <Icon
-                            name="ph:hair-dryer-fill"
-                            size="20"
-                            class="text-sec"
-                          />
-                        </p>
+                        <p class="text-xl font-bold">Braids</p>
 
                         <p class="leading-5">
                           Mentor people in tech, grow your network and create a
@@ -119,14 +112,7 @@ const handleGoBack = () => {
                     </div>
                     <FormLabel>
                       <div class="cursor-pointer">
-                        <p class="text-xl font-bold">
-                          Join as an individual
-                          <Icon
-                            name="mingcute:hair-fill"
-                            size="20"
-                            class="text-sec"
-                          />
-                        </p>
+                        <p class="text-xl font-bold">Ghana weaving</p>
 
                         <p class="leading-5">
                           Mentor people in tech, grow your network and create a

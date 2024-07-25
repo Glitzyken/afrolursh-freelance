@@ -88,8 +88,8 @@ const onSubmit = handleSubmit(async (values) => {
                         </p>
 
                         <p class="leading-5">
-                          Mentor people in tech, grow your network and create a
-                          great legacy in a global community
+                          Render services, grow your network, and earn weekly
+                          income.
                         </p>
                       </div>
                     </FormLabel>
@@ -120,8 +120,8 @@ const onSubmit = handleSubmit(async (values) => {
                         </p>
 
                         <p class="leading-5">
-                          Mentor people in tech, grow your network and create a
-                          great legacy in a global community
+                          Book appointments with top specialists, and get
+                          rewarded.
                         </p>
                       </div>
                     </FormLabel>
