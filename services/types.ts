@@ -43,8 +43,10 @@ export type User = {
 
 export type Service = {
   _id: string;
-  id: string;
   name: string;
+  picture: string;
   NGN: number;
   EUR: number;
+  createdAt: string;
+  updatedAt: string;
 };

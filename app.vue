@@ -112,13 +112,13 @@ useHead({
   <div class="mx-5 md:mx-10 lg:mx-32 text-sec">
     <ClientOnly>
       <Toaster richColors closeButton position="top-right" />
+      <SignupModal />
+      <Navbar />
+      <Drawer />
+      <main class="min-h-screen">
+        <NuxtPage />
+      </main>
+      <Footer />
     </ClientOnly>
-    <SignupModal />
-    <Navbar />
-    <Drawer />
-    <main class="min-h-screen">
-      <NuxtPage />
-    </main>
-    <Footer />
   </div>
 </template>

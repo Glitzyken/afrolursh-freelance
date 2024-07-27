@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { h } from "vue";
-import { toTypedSchema } from "@vee-validate/zod";
-import * as z from "zod";
 import { useForm } from "vee-validate";
 import {
   FormControl,
@@ -9,188 +6,56 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  FormDescription,
 } from "@/components/ui/form";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { API } from "~/services";
 import { useAuthStore } from "~/store/auth";
+import { useServiceStore } from "~/store/service";
 
-import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import type { Service } from "~/services/types";
 
 definePageMeta({
   middleware: "auth",
 });
 
 const authStore = useAuthStore();
+const serviceStore = useServiceStore();
 
+const services = ref<Service[]>([]);
 const isLoading = ref(false);
-const role = ref("Individual");
-
-const items = [
-  {
-    id: "recents",
-    label: "Recents",
-  },
-  {
-    id: "home",
-    label: "Home",
-  },
-  {
-    id: "applications",
-    label: "Applications",
-  },
-  {
-    id: "desktop",
-    label: "Desktop",
-  },
-  {
-    id: "downloads",
-    label: "Downloads",
-  },
-  {
-    id: "documents",
-    label: "Documents",
-  },
-  {
-    id: "recents",
-    label: "Recents",
-  },
-  {
-    id: "home",
-    label: "Home",
-  },
-  {
-    id: "applications",
-    label: "Applications",
-  },
-  {
-    id: "desktop",
-    label: "Desktop",
-  },
-  {
-    id: "downloads",
-    label: "Downloads",
-  },
-  {
-    id: "documents",
-    label: "Documents",
-  },
-  {
-    id: "recents",
-    label: "Recents",
-  },
-  {
-    id: "home",
-    label: "Home",
-  },
-  {
-    id: "applications",
-    label: "Applications",
-  },
-  {
-    id: "desktop",
-    label: "Desktop",
-  },
-  {
-    id: "downloads",
-    label: "Downloads",
-  },
-  {
-    id: "documents",
-    label: "Documents",
-  },
-  {
-    id: "recents",
-    label: "Recents",
-  },
-  {
-    id: "home",
-    label: "Home",
-  },
-  {
-    id: "applications",
-    label: "Applications",
-  },
-  {
-    id: "desktop",
-    label: "Desktop",
-  },
-  {
-    id: "downloads",
-    label: "Downloads",
-  },
-  {
-    id: "documents",
-    label: "Documents",
-  },
-  {
-    id: "recents",
-    label: "Recents",
-  },
-  {
-    id: "home",
-    label: "Home",
-  },
-  {
-    id: "applications",
-    label: "Applications",
-  },
-  {
-    id: "desktop",
-    label: "Desktop",
-  },
-  {
-    id: "downloads",
-    label: "Downloads",
-  },
-  {
-    id: "documents",
-    label: "Documents",
-  },
-  {
-    id: "recents",
-    label: "Recents",
-  },
-  {
-    id: "home",
-    label: "Home",
-  },
-  {
-    id: "applications",
-    label: "Applications",
-  },
-  {
-    id: "desktop",
-    label: "Desktop",
-  },
-  {
-    id: "downloads",
-    label: "Downloads",
-  },
-  {
-    id: "documents",
-    label: "Documents",
-  },
-] as const;
-
-const formSchema = toTypedSchema(
-  z.object({
-    items: z.array(z.string()).refine((value) => value.some((item) => item), {
-      message: "You have to select at least one item.",
-    }),
-  })
-);
 
 const { handleSubmit } = useForm({
-  validationSchema: formSchema,
+  validationSchema: servicesSchema,
   initialValues: {
-    items: ["recents", "home"],
+    services: serviceStore.selectedServicesIds,
   },
 });
 
-const onSubmit = handleSubmit((values) => {
-  console.log(values);
+const onSubmit = handleSubmit(async (values) => {
+  isLoading.value = true;
+
+  const serviceIds = [...values.services];
+
+  const data = await API.user.updateMe({
+    serviceIds,
+    onboardingStep: 2,
+  });
+
+  isLoading.value = false;
+
+  if (data) {
+    authStore.user = data.data?.result;
+    serviceStore.selectedServicesIds = serviceIds;
+    useRouter().push({ path: "/onboarding/address" });
+  }
+});
+
+onBeforeMount(async () => {
+  const data = await API.service.getAll();
+
+  if (data) {
+    services.value = data.data.result.services;
+  }
 });
 
 const handleGoBack = () => {
@@ -212,28 +77,28 @@ const handleGoBack = () => {
     <ClientOnly>
       <form class="mt-10" @submit="onSubmit">
         <div class="max-h-96 overflow-scroll overflow-x-hidden p-2">
-          <FormField name="items">
+          <FormField name="services">
             <FormItem class="flex flex-wrap justify-left items-end gap-4">
               <FormField
-                v-for="item in items"
+                v-for="service in services"
                 v-slot="{ value, handleChange }"
-                :key="item.id"
+                :key="service._id"
                 type="checkbox"
-                :value="item.id"
+                :value="service._id"
                 :unchecked-value="false"
-                name="items"
+                name="services"
               >
                 <FormItem
                   class="flex flex-row items-start space-x-3 space-y-0 bg-pri/25 p-5 rounded-md"
                 >
                   <FormControl>
                     <Checkbox
-                      :checked="value.includes(item.id)"
+                      :checked="value.includes(service._id)"
                       @update:checked="handleChange"
                     />
                   </FormControl>
                   <FormLabel class="font-normal">
-                    {{ item.label }}
+                    {{ service.name }}
                   </FormLabel>
                 </FormItem>
               </FormField>

@@ -4,6 +4,7 @@ import { useAuthStore } from "~/store/auth";
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
   const onboardingRoutes = [
+    PAGE.dashboard,
     PAGE.onboarding_start,
     PAGE.onboarding_services,
     PAGE.onboarding_address,
@@ -87,13 +88,16 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     if (!result) return handleLogOut();
 
     authStore.user = result?.data?.result;
-    authStore.isLoggedIn = true;
 
     if (onboardingRoutes.includes(to.path)) {
       const { user } = authStore;
 
       if (user?.isOnboard) {
         return handleNavigateToDashboard();
+      }
+
+      if (user?.onboardingStep < 1) {
+        return handleNavigateToOnboardingStart();
       }
 
       if (user?.onboardingStep === 1) {
@@ -106,11 +110,9 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
             return handleNavigateToOnboardingServices();
         }
       }
-    }
 
-    if (to.path === PAGE.dashboard) {
-      if (!authStore.user?.isOnboard) {
-        return handleNavigateToOnboardingStart();
+      if (user?.onboardingStep === 2) {
+        return handleNavigateToOnboardingAddress();
       }
     }
   }

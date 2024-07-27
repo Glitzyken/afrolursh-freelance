@@ -15,11 +15,5 @@ export type UpdateMePayload = {
   wishList?: string[];
   howHeardAboutUs?: string;
   onboardingStep?: number;
-  servicesOffered?: {
-    identifier: string;
-    name: string;
-    NGN: number;
-    EUR: number;
-    standard: string;
-  }[];
+  serviceIds?: string[];
 };
