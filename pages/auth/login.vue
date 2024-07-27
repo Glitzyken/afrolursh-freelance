@@ -41,10 +41,6 @@ const onSubmit = handleSubmit(async (values) => {
     successToast("Logged in successfully");
 
     setTimeout(() => {
-      if (!authStore.user?.isOnboard) {
-        return useRouter().replace({ path: "/onboarding/start" });
-      }
-
       useRouter().replace({ path: "/dashboard" });
     }, 2000);
   }
