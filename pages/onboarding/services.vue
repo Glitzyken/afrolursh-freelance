@@ -12,7 +12,7 @@ import { useAuthStore } from "~/store/auth";
 import { useServiceStore } from "~/store/service";
 
 import { Checkbox } from "@/components/ui/checkbox";
-import type { Service } from "~/services/types";
+import type { Service } from "~/services/service/types";
 
 definePageMeta({
   middleware: "auth",

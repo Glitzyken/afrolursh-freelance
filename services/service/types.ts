@@ -1,6 +1,14 @@
-import type { Service } from "../types";
-
 // RESPONSE
+export type Service = {
+  _id: string;
+  name: string;
+  picture: string;
+  NGN: number;
+  EUR: number;
+  createdAt: string;
+  updatedAt: string;
+};
+
 export type ServicesResponse = {
   page: number;
   perPage: number;

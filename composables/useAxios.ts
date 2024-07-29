@@ -1,12 +1,26 @@
-import axios, { AxiosError, type InternalAxiosRequestConfig } from "axios";
+import axios, {
+  AxiosError,
+  type AxiosInstance,
+  type InternalAxiosRequestConfig,
+} from "axios";
 
-export const useAxios = () => {
-  const api = axios.create({
-    baseURL: import.meta.env.VITE_BASE_URL,
-    headers: {
-      common: {},
-    },
-  });
+export const useAxios = (noBaseUrl?: boolean) => {
+  let api: AxiosInstance;
+
+  if (noBaseUrl) {
+    api = axios.create({
+      headers: {
+        common: {},
+      },
+    });
+  } else {
+    api = axios.create({
+      baseURL: import.meta.env.VITE_BASE_URL,
+      headers: {
+        common: {},
+      },
+    });
+  }
 
   const getTokenFromConfig = (config: InternalAxiosRequestConfig) => {
     if (config && config?.headers && config.headers?.Authorization) {

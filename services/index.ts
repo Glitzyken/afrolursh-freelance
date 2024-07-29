@@ -3,7 +3,8 @@ import { isAxiosError } from "axios";
 
 import authController from "./auth";
 import userController from "./user";
-import serviceController from "./pro-services";
+import serviceController from "./service";
+import countryController from "./country";
 
 export const handleError = async (error: AxiosError) => {
   let message = "Unexpected error";
@@ -34,4 +35,5 @@ export const API = {
   auth: authController,
   user: userController,
   service: serviceController,
+  country: countryController,
 };

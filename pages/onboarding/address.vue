@@ -3,10 +3,8 @@ import { toTypedSchema } from "@vee-validate/zod";
 import * as z from "zod";
 import { vAutoAnimate } from "@formkit/auto-animate/vue";
 import { useForm } from "vee-validate";
-import { Button } from "@/components/ui/button";
 import {
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -14,6 +12,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useAuthStore } from "~/store/auth";
+import type { Country, IpCountry } from "~/services/country/types";
+import { API } from "~/services";
 
 definePageMeta({
   middleware: "auth",
@@ -22,6 +22,21 @@ definePageMeta({
 const authStore = useAuthStore();
 
 const isLoading = ref(false);
+const supportedCountries = ref<Country[]>([]);
+const detectedCountry = ref<IpCountry>();
+
+onBeforeMount(async () => {
+  const countries = await API.country.getSupportedCountries();
+  const ipCountry = await API.country.getIpCountry();
+
+  if (countries) {
+    supportedCountries.value = countries.data.result;
+  }
+
+  if (ipCountry) {
+    detectedCountry.value = ipCountry.data;
+  }
+});
 
 const formSchema = toTypedSchema(
   z.object({

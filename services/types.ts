@@ -40,13 +40,3 @@ export type User = {
   }[];
   createdAt: string;
 };
-
-export type Service = {
-  _id: string;
-  name: string;
-  picture: string;
-  NGN: number;
-  EUR: number;
-  createdAt: string;
-  updatedAt: string;
-};
