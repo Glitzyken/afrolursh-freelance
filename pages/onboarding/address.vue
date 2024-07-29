@@ -76,6 +76,7 @@ const handleGoBack = () => {
               <FormControl>
                 <SelectTrigger class="bg-white border-2 border-sec/25">
                   <SelectValue
+                    v-if="detectedCountry"
                     :placeholder="`${detectedCountry?.name.common} ${detectedCountry?.flag}`"
                   />
                 </SelectTrigger>

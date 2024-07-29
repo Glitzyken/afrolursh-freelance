@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useAuthStore } from "@/store/auth";
 import { useForm } from "vee-validate";
+import { vAutoAnimate } from "@formkit/auto-animate/vue";
 
 import {
   Dialog,
@@ -36,19 +37,12 @@ const onSubmit = handleSubmit(async (values) => {
   <div>
     <ClientOnly>
       <Dialog v-model:open="useAuthStore().isSignupModalOpen">
-        <DialogContent
-          v-motion-slide-visible-once-bottom
-          class="sm:max-w-[525px] bg-white"
-          v-if="isLinkSent"
-        >
-          <DialogHeader v-motion-slide-visible-once-left>
+        <DialogContent class="sm:max-w-[525px] bg-white" v-if="isLinkSent">
+          <DialogHeader>
             <DialogTitle class="font-bold text-xl text-center"
               >Verify you email address</DialogTitle
             >
-            <DialogDescription
-              v-motion-slide-visible-once-left
-              class="text-center text-sm text-sec"
-            >
+            <DialogDescription class="text-center text-sm text-sec">
               We've sent a verification email to example@example.com <br />
               Check your inbox, spam, or promotion folder.
             </DialogDescription>
@@ -95,12 +89,8 @@ const onSubmit = handleSubmit(async (values) => {
           </div>
         </DialogContent>
 
-        <DialogContent
-          v-motion-slide-visible-once-bottom
-          class="sm:max-w-[525px] bg-white"
-          v-else
-        >
-          <DialogHeader v-motion-slide-visible-once-left>
+        <DialogContent class="sm:max-w-[525px] bg-white" v-else>
+          <DialogHeader>
             <DialogTitle class="font-bold text-xl text-center"
               >Start your beauty ... today!</DialogTitle
             >
