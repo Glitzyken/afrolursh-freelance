@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { toTypedSchema } from "@vee-validate/zod";
-import * as z from "zod";
 import { vAutoAnimate } from "@formkit/auto-animate/vue";
 import { useForm } from "vee-validate";
 import {
@@ -12,7 +10,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useAuthStore } from "~/store/auth";
-import type { Country, IpCountry } from "~/services/country/types";
+import type { Country } from "~/services/country/types";
 import { API } from "~/services";
 
 definePageMeta({
@@ -23,7 +21,7 @@ const authStore = useAuthStore();
 
 const isLoading = ref(false);
 const supportedCountries = ref<Country[]>([]);
-const detectedCountry = ref<IpCountry>();
+const detectedCountry = ref<Country>();
 
 onBeforeMount(async () => {
   const countries = await API.country.getSupportedCountries();
@@ -34,21 +32,18 @@ onBeforeMount(async () => {
   }
 
   if (ipCountry) {
-    detectedCountry.value = ipCountry.data;
+    detectedCountry.value = supportedCountries.value.find(
+      (country) => country.cca2 === ipCountry.data.country_code2
+    );
   }
 });
 
-const formSchema = toTypedSchema(
-  z.object({
-    address: z.string().min(2),
-  })
-);
-
 const { handleSubmit } = useForm({
-  validationSchema: formSchema,
+  validationSchema: addressSchema,
 });
 
 const onSubmit = handleSubmit(async (values) => {
+  if (!values.country) values.country = detectedCountry.value?.ccn3;
   console.log(values);
 });
 
@@ -71,6 +66,36 @@ const handleGoBack = () => {
 
     <ClientOnly>
       <form class="mt-10 space-y-6" @submit="onSubmit">
+        <FormField v-slot="{ componentField }" name="country">
+          <FormItem>
+            <div class="text-left">
+              <FormLabel>What country do you live in?</FormLabel>
+            </div>
+
+            <Select v-bind="componentField">
+              <FormControl>
+                <SelectTrigger class="bg-white border-2 border-sec/25">
+                  <SelectValue
+                    :placeholder="`${detectedCountry?.name.common} ${detectedCountry?.flag}`"
+                  />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent class="bg-white">
+                <SelectGroup class="bg-white">
+                  <SelectItem
+                    v-for="country in supportedCountries"
+                    :key="country.name.common"
+                    :value="country.ccn3"
+                  >
+                    {{ country.name.common }} {{ country.flag }}
+                  </SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+            <FormMessage />
+          </FormItem>
+        </FormField>
+
         <FormField v-slot="{ componentField }" name="address">
           <FormItem v-auto-animate>
             <div class="text-left">

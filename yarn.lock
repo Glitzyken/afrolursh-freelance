@@ -756,6 +756,13 @@
   resolved "https://registry.npmjs.org/@formkit/auto-animate/-/auto-animate-0.8.2.tgz"
   integrity sha512-SwPWfeRa5veb1hOIBMdzI+73te5puUBHmqqaF1Bu7FjvxlYSz/kJcZKSa9Cg60zL0uRNeJL2SbRxV6Jp6Q1nFQ==
 
+"@headlessui/vue@^1.7.18":
+  version "1.7.22"
+  resolved "https://registry.yarnpkg.com/@headlessui/vue/-/vue-1.7.22.tgz#8d55a3a670c3d48beb660b7c47a7a8ff76caacfe"
+  integrity sha512-Hoffjoolq1rY+LOfJ+B/OvkhuBXXBFgd8oBlN+l1TApma2dB0En0ucFZrwQtb33SmcCqd32EQd0y07oziXWNYg==
+  dependencies:
+    "@tanstack/vue-virtual" "^3.0.0-beta.60"
+
 "@iconify/collections@^1.0.406":
   version "1.0.440"
   resolved "https://registry.npmjs.org/@iconify/collections/-/collections-1.0.440.tgz"
@@ -1446,7 +1453,7 @@
   resolved "https://registry.npmjs.org/@tanstack/virtual-core/-/virtual-core-3.8.3.tgz"
   integrity sha512-vd2A2TnM5lbnWZnHi9B+L2gPtkSeOtJOAw358JqokIH1+v2J7vUAzFVPwB/wrye12RFOurffXu33plm4uQ+JBQ==
 
-"@tanstack/vue-virtual@^3.8.1":
+"@tanstack/vue-virtual@^3.0.0-beta.60", "@tanstack/vue-virtual@^3.8.1":
   version "3.8.3"
   resolved "https://registry.npmjs.org/@tanstack/vue-virtual/-/vue-virtual-3.8.3.tgz"
   integrity sha512-xrFLkOiqLoGwohgr1+Q880hkNdQWqwi19EXzx38iAjVEm1Db3KIAV0aVP57/dnNXU3NO1Vx8wnIHII5J4n1LyA==
@@ -4449,6 +4456,15 @@ nuxi@^3.12.0:
   integrity sha512-6vRdiXTw9SajEQOUi6Ze/XaIXzy1q/sD5UqHQSv3yqTu7Pot5S7fEihNXV8LpcgLz+9HzjVt70r7jYe7R99c2w==
   optionalDependencies:
     fsevents "~2.3.3"
+
+nuxt-headlessui@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/nuxt-headlessui/-/nuxt-headlessui-1.2.0.tgz#87e873ba0c54ab1d6968abb3d6b749be9d44d641"
+  integrity sha512-eidWwA4SFLWFk2KcGMHlrPTJb+ODEt5Bsj6cXjmhDtRYydqvgYXHU1U7563E6/qMuayThumbGUopF1IRqlYHwA==
+  dependencies:
+    "@headlessui/vue" "^1.7.18"
+    "@nuxt/kit" "^3.11.2"
+    pathe "^1.1.2"
 
 nuxt-icon@^0.6.10:
   version "0.6.10"
