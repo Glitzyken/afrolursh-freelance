@@ -10,6 +10,7 @@ export const PAGE = {
   onboarding_start: "/onboarding/start",
   onboarding_services: "/onboarding/services",
   onboarding_address: "/onboarding/address",
+  onboarding_bio: "/onboarding/bio",
 };
 
 export const SUPPORTED_COUNTRIES = {

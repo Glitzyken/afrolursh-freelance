@@ -48,6 +48,12 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     }
   };
 
+  const handleNavigateToOnboardingBio = () => {
+    if (to.path !== PAGE.onboarding_bio) {
+      router.replace({ path: PAGE.onboarding_bio });
+    }
+  };
+
   if (import.meta.client) {
     if (
       to.path === PAGE.auth_signup_complete ||
@@ -98,7 +104,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
       if (user?.onboardingStep <= 0) {
         if (authStore.isGoBack) return;
-
         return handleNavigateToOnboardingStart();
       }
 
@@ -116,8 +121,12 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
       if (user?.onboardingStep === 2) {
         if (authStore.isGoBack) return;
-
         return handleNavigateToOnboardingAddress();
+      }
+
+      if (user?.onboardingStep === 3) {
+        if (authStore.isGoBack) return;
+        return handleNavigateToOnboardingBio();
       }
     }
   }
