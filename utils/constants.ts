@@ -11,3 +11,8 @@ export const PAGE = {
   onboarding_services: "/onboarding/services",
   onboarding_address: "/onboarding/address",
 };
+
+export const SUPPORTED_COUNTRIES = {
+  nigeria: "566",
+  unitedKingdom: "826",
+};

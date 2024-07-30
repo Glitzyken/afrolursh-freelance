@@ -10,6 +10,7 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { API } from "~/services";
 import { useAuthStore } from "~/store/auth";
+import { Role } from "~/services/enums";
 
 const authStore = useAuthStore();
 
@@ -28,15 +29,27 @@ const onSubmit = handleSubmit(async (values) => {
   isLoading.value = true;
   if (!values.role) values.role = "Individual";
 
+  let onboardingStep = 1;
+
+  if (values.role === Role.Individual) {
+    onboardingStep = 2;
+  }
+
   const data = await API.user.updateMe({
     role: values.role,
-    onboardingStep: 1,
+    onboardingStep,
   });
 
   isLoading.value = false;
 
   if (data) {
     authStore.user = data.data?.result;
+
+    if (authStore.user?.role === Role.Individual) {
+      useRouter().push({ path: "/onboarding/address" });
+      return;
+    }
+
     useRouter().push({ path: "/onboarding/services" });
   }
 });

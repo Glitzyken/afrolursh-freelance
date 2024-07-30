@@ -96,22 +96,27 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
         return handleNavigateToDashboard();
       }
 
-      if (user?.onboardingStep < 1) {
+      if (user?.onboardingStep <= 0) {
+        if (authStore.isGoBack) return;
+
         return handleNavigateToOnboardingStart();
       }
 
       if (user?.onboardingStep === 1) {
+        if (authStore.isGoBack) return;
+
         if (user.role === Role.Individual) {
           return handleNavigateToOnboardingAddress();
         }
 
         if (user.role === Role.Specialist) {
-          if (from.path !== PAGE.onboarding_services)
-            return handleNavigateToOnboardingServices();
+          return handleNavigateToOnboardingServices();
         }
       }
 
       if (user?.onboardingStep === 2) {
+        if (authStore.isGoBack) return;
+
         return handleNavigateToOnboardingAddress();
       }
     }

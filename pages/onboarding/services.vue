@@ -59,6 +59,7 @@ onBeforeMount(async () => {
 });
 
 const handleGoBack = () => {
+  authStore.isGoBack = true;
   useRouter().push({ path: "/onboarding/start" });
 };
 </script>

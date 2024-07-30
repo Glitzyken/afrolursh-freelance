@@ -13,6 +13,26 @@ const getSupportedCountries = async () => {
   }
 };
 
+const getCitiesNg = async () => {
+  try {
+    return await http.get<APIResponse<string[]>>(
+      "/countries/supported/cities/NG"
+    );
+  } catch (error: any) {
+    return handleError(error);
+  }
+};
+
+const getCitiesGb = async () => {
+  try {
+    return await http.get<APIResponse<{ en_name: string }[]>>(
+      "/countries/supported/cities/GB"
+    );
+  } catch (error: any) {
+    return handleError(error);
+  }
+};
+
 const getIpCountry = async () => {
   try {
     return await useAxios(true).get<IpCountry>(
@@ -26,4 +46,6 @@ const getIpCountry = async () => {
 export default {
   getSupportedCountries,
   getIpCountry,
+  getCitiesNg,
+  getCitiesGb,
 };

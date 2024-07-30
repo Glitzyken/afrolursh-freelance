@@ -9,7 +9,6 @@ export type UpdateMePayload = {
   languages?: string[];
   address?: string;
   city?: string;
-  state?: string;
   country?: string;
   bio?: string;
   wishList?: string[];

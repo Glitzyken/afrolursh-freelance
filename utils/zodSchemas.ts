@@ -48,5 +48,6 @@ export const addressSchema = toTypedSchema(
   z.object({
     country: z.string().min(2).optional(),
     address: z.string().min(2),
+    city: z.string().min(2),
   })
 );
