@@ -157,7 +157,7 @@ const handlePrev = () => {
               <div class="mb-6 mt-28">
                 <div class="flex flex-col items-center justify-center">
                   <div class="h-10 w-10">
-                    <!-- <Icon name="solar:home-bold" size="40" class="text-sec" /> -->
+                    <Icon name="solar:upload-bold" size="40" class="text-sec" />
                   </div>
                   <p
                     class="mt-4 text-center text-sm tracking-wider text-whitest"
