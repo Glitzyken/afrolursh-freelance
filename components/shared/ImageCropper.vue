@@ -5,7 +5,6 @@ import "vue-advanced-cropper/dist/style.css";
 const cropperRef = ref<InstanceType<typeof Cropper> | null>(null);
 const image = ref<string>("");
 const imageBlob = ref();
-const imageBlobURL = ref<string>("");
 
 defineProps({
   isModalCropOpen: Boolean,
@@ -17,10 +16,7 @@ defineProps({
 const emits = defineEmits<{
   (e: "try-diff-photo"): void;
   (e: "close"): void;
-  (
-    e: "crop-data",
-    data: { imageBlob: Blob; imageBlobURL: string; image: string }
-  ): void;
+  (e: "crop-data", data: { imageBlob: Blob; image: string }): void;
 }>();
 
 const handleTryDifferentPhoto = () => {
@@ -43,11 +39,9 @@ const handleGetCropData = () => {
           if (!blob) return;
 
           imageBlob.value = blob;
-          imageBlobURL.value = URL.createObjectURL(imageBlob.value);
 
           emits("crop-data", {
             imageBlob: imageBlob.value,
-            imageBlobURL: imageBlobURL.value,
             image: image.value,
           });
         });

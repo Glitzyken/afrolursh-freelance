@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { Cropper } from "vue-advanced-cropper";
-
 const cropperImage = ref<string>("");
 const image = ref<string>("");
 const imageBlob = ref();
@@ -18,15 +16,12 @@ const closeModal = () => {
   isModalCropOpen.value = false;
 };
 
-const getCropData = (data: {
-  imageBlob: Blob;
-  imageBlobURL: string;
-  image: string;
-}) => {
-  console.log({ data });
+const getCropData = (data: { imageBlob: Blob; image: string }) => {
   image.value = data.image;
-
+  imageBlob.value = data.imageBlob;
   isModalCropOpen.value = false;
+
+  console.log(imageBlob.value);
 };
 
 const pickPhoto = () => {
@@ -52,17 +47,16 @@ const handleDrop = () => {
 
 const clearPhoto = (e?: Event) => {
   e?.preventDefault();
-  // setImage("")
-  // setImgBlob(null)
-  // setImgFormData(null)
 
   const input = document.getElementById(
     "profile-picture-input"
   ) as HTMLInputElement;
 
   if (input?.value) {
-    console.log("Empty profile picture");
     input.value = "";
+    image.value = "";
+    imageBlob.value = null;
+    // setImgFormData(null)
   }
 };
 
@@ -99,14 +93,6 @@ const handleSubmit = (callback: any) => {
       @try-diff-photo="pickPhoto"
     />
 
-    <!-- <SideSlider
-      :open="open"
-      @setOpen="setOpen"
-      title="Tips for making a profile picture"
-    >
-      <ProfileImageTips />
-    </SideSlider> -->
-
     <div class="mx-auto mb-6 mt-9 sm:mb-8 sm:mt-16 sm:w-[520px] sm:text-center">
       <h1 class="mb-8x text-xl font-bold sm:text-2xl">
         Put a face to your name.
@@ -123,7 +109,12 @@ const handleSubmit = (callback: any) => {
     >
       <section class="text-left sm:text-center">
         <div class="relative mx-auto font-medium sm:w-[320px]">
-          <ImageDisplay v-if="image" :image="image" />
+          <ImageDisplay
+            v-if="image"
+            :image="image"
+            @pick-photo="pickPhoto"
+            @clear-photo="clearPhoto"
+          />
           <label
             :class="`w-full cursor-pointer ${
               image ? 'absolute left-0 top-0 -z-10' : 'z-10'
@@ -134,7 +125,7 @@ const handleSubmit = (callback: any) => {
               @dragleave="handleDragLeave"
               @dragover="handleDragOver"
               @drop="handleDrop"
-              :class="`flex h-[380px] flex-col rounded-xl border-2 border-dashed bg-dark px-30x shadow ${
+              :class="`flex h-[380px] flex-col rounded border-2 border-dashed bg-dark px-30x shadow ${
                 dragging ? 'border-white' : 'border-grey2'
               }`"
             >

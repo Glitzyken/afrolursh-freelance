@@ -7,20 +7,16 @@ defineProps({
 });
 
 const emits = defineEmits<{
-  (e: "try-diff-photo"): void;
-  (e: "close"): void;
-  (
-    e: "crop-data",
-    data: { imageBlob: Blob; imageBlobURL: string; image: string }
-  ): void;
+  (e: "clear-photo"): void;
+  (e: "pick-photo"): void;
 }>();
 
 const clearPhoto = () => {
-  // Function to clear the photo
+  emits("clear-photo");
 };
 
-const onButtonClick = () => {
-  // Function to handle button click for selecting image
+const pickPhoto = () => {
+  emits("pick-photo");
 };
 </script>
 
@@ -32,15 +28,19 @@ const onButtonClick = () => {
       title="remove image"
       class="absolute right-4 top-4 inline-flex h-8 w-8 items-center justify-center rounded-full border border-[#D1D5DB] bg-white"
     >
-      <TrashIcon size="18" class="text-[#292D32]" />
+      <Icon
+        name="solar:trash-bin-minimalistic-bold"
+        size="18"
+        class="text-black"
+      />
     </button>
     <button
       :disabled="isLoading || isLoadingUpdate"
-      @click="onButtonClick"
+      @click="pickPhoto"
       title="select image"
       class="absolute right-14 top-4 inline-flex h-8 w-8 items-center justify-center rounded-full border border-[#D1D5DB] bg-white"
     >
-      <UploadIcon size="18" class="text-[#292D32]" />
+      <Icon name="solar:upload-bold" size="18" class="text-black" />
     </button>
     <nuxt-img
       width="320"
