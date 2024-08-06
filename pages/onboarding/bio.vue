@@ -15,6 +15,7 @@
 
 const cropperImage = ref<string>("");
 const image = ref<string>("");
+const inputFile = ref<HTMLInputElement | null>(null);
 const isModalCropOpen = ref(false);
 // const cropperRef = ref(null);
 const fileSizeError = ref(false);
@@ -27,17 +28,19 @@ const user = ref({});
 const errors = ref({});
 
 const closeModal = () => {
-  /* your logic here */
-  console.log("Closing modal...");
+  clearPhoto();
+  isModalCropOpen.value = false;
 };
 
 const getCropData = () => {
   /* your logic here */
   console.log("Getting crop data...");
 };
+
 const pickPhoto = () => {
-  /* your logic here */
-  console.log("Open File Explorer...");
+  if (inputFile.value) {
+    inputFile.value.click();
+  }
 };
 
 const handleDragEnter = () => {
@@ -53,7 +56,7 @@ const handleDrop = () => {
   /* your logic here */
 };
 
-const clearPhoto = (e: any) => {
+const clearPhoto = (e?: Event) => {
   e?.preventDefault();
   // setImage("")
   // setImgBlob(null)
@@ -68,10 +71,10 @@ const clearPhoto = (e: any) => {
   }
 };
 
-const inputFile = ref(null);
-const handleImageChange = (e: any) => {
+const handleImageChange = (e: Event) => {
   isModalCropOpen.value = true;
-  const file = e.target.files[0];
+  const target = e.target as HTMLInputElement;
+  const file = target.files ? target.files[0] : null;
 
   console.log(file);
 
@@ -151,7 +154,7 @@ const handlePrev = () => {
               <div class="mb-6 mt-28">
                 <div class="flex flex-col items-center justify-center">
                   <div class="h-10 w-10">
-                    <ImgUploadIcon class="h-full w-full" />
+                    <!-- <Icon name="solar:home-bold" size="40" class="text-sec" /> -->
                   </div>
                   <p
                     class="mt-4 text-center text-sm tracking-wider text-whitest"
