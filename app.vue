@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import Navbar from "~~/components/navigation/NavBar.vue";
 import { Toaster } from "vue-sonner";
+
+import Navbar from "./components/navigation/NavBar.vue";
 import SignupModal from "./components/auth/SignupModal.vue";
 
 useHead({
