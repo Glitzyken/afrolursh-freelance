@@ -2,6 +2,11 @@
 import { Cropper } from "vue-advanced-cropper";
 import "vue-advanced-cropper/dist/style.css";
 
+const cropperRef = ref<InstanceType<typeof Cropper> | null>(null);
+const image = ref<string>("");
+const imageBlob = ref();
+const imageBlobURL = ref<string>("");
+
 defineProps({
   isModalCropOpen: Boolean,
   fileSizeError: Boolean,
@@ -12,15 +17,43 @@ defineProps({
 const emits = defineEmits<{
   (e: "try-diff-photo"): void;
   (e: "close"): void;
-  (e: "crop-data", data: any): void;
+  (
+    e: "crop-data",
+    data: { imageBlob: Blob; imageBlobURL: string; image: string }
+  ): void;
 }>();
 
 const handleTryDifferentPhoto = () => {
   emits("try-diff-photo");
 };
 
-const handleGetCropData = (data: any) => {
-  emits("crop-data", data);
+const handleGetCropData = () => {
+  const cropper = cropperRef.value;
+
+  if (cropper) {
+    const result = cropper.getResult();
+
+    if (result) {
+      const canvas = result.canvas;
+
+      if (canvas) {
+        image.value = canvas.toDataURL();
+
+        canvas.toBlob((blob) => {
+          if (!blob) return;
+
+          imageBlob.value = blob;
+          imageBlobURL.value = URL.createObjectURL(imageBlob.value);
+
+          emits("crop-data", {
+            imageBlob: imageBlob.value,
+            imageBlobURL: imageBlobURL.value,
+            image: image.value,
+          });
+        });
+      }
+    }
+  }
 };
 
 const handleCloseModal = () => {
@@ -63,6 +96,7 @@ const handleCloseModal = () => {
             <div class="mt-6">
               <Cropper
                 v-if="!fileSizeError"
+                ref="cropperRef"
                 style="height: 420px; width: 100%; border-radius: 12px"
                 :src="cropperImage"
                 :aspect-ratio="1"

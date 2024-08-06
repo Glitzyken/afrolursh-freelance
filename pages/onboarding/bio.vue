@@ -1,40 +1,32 @@
 <script setup lang="ts">
-// import ImageCropper from "@/components/ImageCropper.vue";
-// import SideSlider from "@/components/SideSlider.vue";
-// import ProfileImageTips from "@/components/ProfileImageTips.vue";
-// import ImageDisplay from "@/components/ImageDisplay.vue";
-// import InputWithLabel from "@/components/InputWithLabel.vue";
-// import ButtonPri from "@/components/ButtonPri.vue";
-// import ButtonSec from "@/components/ButtonSec.vue";
-// import Spinner from "@/components/Spinner.vue";
-// import Info from "@/components/icons/Info.vue";
-// import ImgUploadIcon from "@/components/icons/ImgUploadIcon.vue";
-// import LinkedInLogoIcon from "@/components/icons/LinkedInLogoIcon.vue";
-// import TwitterLogo from "@/components/icons/TwitterLogo.vue";
-// import InputIconWrapper from "@/components/InputIconWrapper.vue";
+import type { Cropper } from "vue-advanced-cropper";
 
 const cropperImage = ref<string>("");
 const image = ref<string>("");
+const imageBlob = ref();
 const inputFile = ref<HTMLInputElement | null>(null);
 const isModalCropOpen = ref(false);
-// const cropperRef = ref(null);
 const fileSizeError = ref(false);
 const dragging = ref(false);
-const portfolio = ref("");
 const isLoadingUpdate = ref(false);
 const isLoading = ref(false);
 const isSwagUploading = ref(false);
 const user = ref({});
-const errors = ref({});
 
 const closeModal = () => {
   clearPhoto();
   isModalCropOpen.value = false;
 };
 
-const getCropData = () => {
-  /* your logic here */
-  console.log("Getting crop data...");
+const getCropData = (data: {
+  imageBlob: Blob;
+  imageBlobURL: string;
+  image: string;
+}) => {
+  console.log({ data });
+  image.value = data.image;
+
+  isModalCropOpen.value = false;
 };
 
 const pickPhoto = () => {
@@ -79,8 +71,6 @@ const handleImageChange = (e: Event) => {
   const target = e.target as HTMLInputElement;
   const file = target.files ? target.files[0] : null;
 
-  console.log("CHANGING FILE: " + file);
-
   if (file) {
     if (convertBytesToMB(file.size) > MAX_FILE_SIZE) {
       clearPhoto(e);
@@ -93,12 +83,6 @@ const handleImageChange = (e: Event) => {
 };
 
 const handleSubmit = (callback: any) => {
-  /* your logic here */
-};
-const handleNext = (data: any) => {
-  /* your logic here */
-};
-const handlePrev = () => {
   /* your logic here */
 };
 </script>
@@ -139,7 +123,7 @@ const handlePrev = () => {
     >
       <section class="text-left sm:text-center">
         <div class="relative mx-auto font-medium sm:w-[320px]">
-          <!-- <ImageDisplay /> -->
+          <ImageDisplay v-if="image" :image="image" />
           <label
             :class="`w-full cursor-pointer ${
               image ? 'absolute left-0 top-0 -z-10' : 'z-10'
@@ -266,7 +250,6 @@ const handlePrev = () => {
       </ButtonPri> -->
       <ButtonSec
         :isDisabled="isLoading || isLoadingUpdate || isSwagUploading"
-        @click="handlePrev"
         class="inline-flex w-full rounded-lg bg-grey7 !py-0 px-3 text-sm font-medium hover:bg-grey1"
       >
         Back
