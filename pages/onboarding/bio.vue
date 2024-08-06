@@ -41,6 +41,8 @@ const pickPhoto = () => {
   if (inputFile.value) {
     inputFile.value.click();
   }
+
+  isModalCropOpen.value = false;
 };
 
 const handleDragEnter = () => {
@@ -66,7 +68,8 @@ const clearPhoto = (e?: Event) => {
     "profile-picture-input"
   ) as HTMLInputElement;
 
-  if (input) {
+  if (input?.value) {
+    console.log("Empty profile picture");
     input.value = "";
   }
 };
@@ -76,14 +79,14 @@ const handleImageChange = (e: Event) => {
   const target = e.target as HTMLInputElement;
   const file = target.files ? target.files[0] : null;
 
-  console.log(file);
+  console.log("CHANGING FILE: " + file);
 
   if (file) {
-    if (file.size > 3) {
-      // if (convertBytesToMB(file.size) > MAX_FILE_SIZE) {
+    if (convertBytesToMB(file.size) > MAX_FILE_SIZE) {
       clearPhoto(e);
       fileSizeError.value = true;
     } else {
+      fileSizeError.value = false;
       cropperImage.value = URL.createObjectURL(file);
     }
   }

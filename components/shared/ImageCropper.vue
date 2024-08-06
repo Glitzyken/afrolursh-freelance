@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Cropper } from "vue-advanced-cropper";
+import "vue-advanced-cropper/dist/style.css";
 
 defineProps({
   isModalCropOpen: Boolean,
@@ -14,7 +15,7 @@ const emits = defineEmits<{
   (e: "crop-data", data: any): void;
 }>();
 
-const handleTryDifferentPhoto = (code: string) => {
+const handleTryDifferentPhoto = () => {
   emits("try-diff-photo");
 };
 
@@ -22,7 +23,7 @@ const handleGetCropData = (data: any) => {
   emits("crop-data", data);
 };
 
-const handleCloseModal = (data: any) => {
+const handleCloseModal = () => {
   emits("close");
 };
 </script>
@@ -97,29 +98,28 @@ const handleCloseModal = (data: any) => {
               class="flex items-center justify-end mt-6 gap-6"
             >
               <ButtonSec
-                class="text-sm font-medium link-underline-main to-white from-white"
+                class="text-white p-1"
                 :disabled="isLoading"
-                @click="isLoading ? null : handleCloseModal"
+                @click="handleCloseModal"
               >
                 Close
               </ButtonSec>
               <ButtonBase
-                class="h-10 w-[74px] rounded-[7px]"
                 @click="handleGetCropData"
                 :isLoading="<boolean>isLoading"
                 :isDisabled="<boolean>isLoading"
               >
-                Save
+                Save Crop
                 <template #spinner>
                   <SpinnerSm />
                 </template>
               </ButtonBase>
             </div>
             <div v-else class="flex items-center justify-end mt-6 gap-5">
-              <ButtonSec @click="handleCloseModal as any" class="text-white">
+              <ButtonSec @click="handleCloseModal" class="text-white p-1">
                 Cancel
               </ButtonSec>
-              <ButtonBase class="w-[170px]" @click="handleTryDifferentPhoto">
+              <ButtonBase @click="handleTryDifferentPhoto">
                 Try a different photo
               </ButtonBase>
             </div>

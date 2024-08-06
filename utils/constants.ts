@@ -17,3 +17,5 @@ export const SUPPORTED_COUNTRIES = {
   nigeria: "566",
   unitedKingdom: "826",
 };
+
+export const MAX_FILE_SIZE = 3;
