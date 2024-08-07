@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import { remove } from "lodash";
 import { languageFile } from "~/assets/data/languages";
+import { API } from "~/services";
 import { Role } from "~/services/enums";
 import { useAuthStore } from "~/store/auth";
 
@@ -21,8 +23,8 @@ const languages = ref<string[]>(languageFile);
 const isDropdownSearch = ref(false);
 const selectedLanguages = ref(["English"]);
 const bio = ref<string>("");
-const formDataRef = ref<FormData | null>(null);
-const formData = new FormData();
+const imageFormData = ref<FormData | null>(null);
+const errors = ref<string[]>([]);
 let query = ref("");
 
 const closeModal = () => {
@@ -40,7 +42,15 @@ const getCropData = (data: { imageBlob: Blob; image: string }) => {
   isModalCropOpen.value = false;
   isLoading.value = false;
 
+  const formData = new FormData();
+
   formData.append("image", imageBlob.value);
+
+  imageFormData.value = formData;
+
+  if (errors.value.includes("photo")) {
+    remove(errors.value, (val) => val === "photo");
+  }
 };
 
 const pickPhoto = () => {
@@ -70,6 +80,7 @@ const handleDrop = (e: DragEvent) => {
   e.preventDefault();
   e.stopPropagation();
   isDragging.value = false;
+  isModalCropOpen.value = true;
 
   const file = e?.dataTransfer?.files[0];
 
@@ -97,7 +108,7 @@ const clearPhoto = (e?: Event) => {
     input.value = "";
     image.value = "";
     imageBlob.value = null;
-    // setImgFormData(null)
+    imageFormData.value = null;
   }
 };
 
@@ -132,23 +143,55 @@ const handeShowDropdownSearch = () => {
   isDropdownSearch.value = !isDropdownSearch.value;
 };
 
-const handleSubmit = () => {
-  console.log("FINALIZING...");
+const handleSubmit = async () => {
+  if (authStore.user?.role === Role.Specialist) {
+    if (!imageFormData.value) {
+      errors.value.push("photo");
+    }
 
-  console.log(formData);
+    if (!bio.value) {
+      errors.value.push("bio");
+    }
+
+    if (errors.value.length) return;
+  }
+
+  isLoading.value = true;
 
   const payload = {
     languages: selectedLanguages.value,
     bio: bio.value,
+    onboardingStep: 4,
   };
 
-  console.log({ payload });
+  const uploaded = await API.user.updateMyPhoto(
+    imageFormData.value as FormData
+  );
+
+  isLoading.value = false;
+
+  if (uploaded) {
+    const data = await API.user.updateMe(payload);
+
+    if (data) {
+      authStore.user = data.data?.result;
+      useRouter().push({ path: "/onboarding/finish" });
+    }
+  }
 };
 
 const handleGoBack = () => {
   authStore.isGoBack = true;
   useRouter().push({ path: "/onboarding/address" });
 };
+
+watch(bio, (val) => {
+  if (val.length > 50) {
+    if (errors.value.includes("bio")) {
+      remove(errors.value, (val) => val === "bio");
+    }
+  }
+});
 </script>
 
 <template>
@@ -237,6 +280,13 @@ const handleGoBack = () => {
             </div>
           </label>
         </div>
+        <p
+          v-if="errors.includes('photo')"
+          v-motion-slide-top
+          class="mt-[0.3rem] text-xs text-red-700"
+        >
+          Photo is required
+        </p>
       </section>
 
       <section class="sm:w-[400px]">
@@ -313,6 +363,13 @@ const handleGoBack = () => {
               placeholder="Type your message here."
               v-model="bio"
             />
+            <p
+              v-if="errors.includes('bio')"
+              v-motion-slide-top
+              class="text-xs text-red-700"
+            >
+              Bio must be at least 50 characters long
+            </p>
             <p class="text-sm text-muted-foreground">
               How would you like to be intro'd? Add a short bio.
             </p>

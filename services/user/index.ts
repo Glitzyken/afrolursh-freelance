@@ -22,7 +22,20 @@ const updateMe = async (payload: UpdateMePayload) => {
   }
 };
 
+const updateMyPhoto = async (payload: FormData) => {
+  try {
+    return await http.patch<APIResponse<User>>("/users/me", payload, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  } catch (error: any) {
+    return handleError(error);
+  }
+};
+
 export default {
   getMe,
   updateMe,
+  updateMyPhoto,
 };
