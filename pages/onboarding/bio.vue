@@ -1,5 +1,13 @@
 <script setup lang="ts">
 import { languageFile } from "~/assets/data/languages";
+import { Role } from "~/services/enums";
+import { useAuthStore } from "~/store/auth";
+
+definePageMeta({
+  middleware: "auth",
+});
+
+const authStore = useAuthStore();
 
 const cropperImage = ref<string>("");
 const image = ref<string>("");
@@ -8,12 +16,13 @@ const inputFile = ref<HTMLInputElement | null>(null);
 const isModalCropOpen = ref(false);
 const fileSizeError = ref(false);
 const isDragging = ref(false);
-const isLoadingUpdate = ref(false);
 const isLoading = ref(false);
-const isSwagUploading = ref(false);
 const languages = ref<string[]>(languageFile);
 const isDropdownSearch = ref(false);
 const selectedLanguages = ref(["English"]);
+const bio = ref<string>("");
+const formDataRef = ref<FormData | null>(null);
+const formData = new FormData();
 let query = ref("");
 
 const closeModal = () => {
@@ -31,7 +40,7 @@ const getCropData = (data: { imageBlob: Blob; image: string }) => {
   isModalCropOpen.value = false;
   isLoading.value = false;
 
-  console.log(imageBlob.value);
+  formData.append("image", imageBlob.value);
 };
 
 const pickPhoto = () => {
@@ -123,8 +132,22 @@ const handeShowDropdownSearch = () => {
   isDropdownSearch.value = !isDropdownSearch.value;
 };
 
-const handleSubmit = (callback: any) => {
-  /* your logic here */
+const handleSubmit = () => {
+  console.log("FINALIZING...");
+
+  console.log(formData);
+
+  const payload = {
+    languages: selectedLanguages.value,
+    bio: bio.value,
+  };
+
+  console.log({ payload });
+};
+
+const handleGoBack = () => {
+  authStore.isGoBack = true;
+  useRouter().push({ path: "/onboarding/address" });
 };
 </script>
 
@@ -144,7 +167,10 @@ const handleSubmit = (callback: any) => {
     <div class="mx-auto mb-6 mt-9 sm:mb-8 sm:mt-16 sm:w-[520px] sm:text-center">
       <h1 class="mb-8x text-xl font-bold sm:text-2xl">
         Put a face to your name.
-        <p>Add a photo and social details</p>
+        <p>
+          Add a photo and
+          {{ authStore.user?.role === Role.Specialist ? "bio" : "language" }}
+        </p>
       </h1>
       <p class="text-sm">
         A photo helps you get bookings and lets people know who they're booking
@@ -272,45 +298,43 @@ const handleSubmit = (callback: any) => {
             </ul>
           </div>
 
-          <div>
-            <!-- <InputWithLabel
-              icon="<InputIconWrapper><TwitterLogo width='19' height='19' weight='fill' /></InputIconWrapper>"
-              label="Twitter (x.com)"
-              :disabled="isLoadingUpdate || isLoading || isSwagUploading"
-              :placeholder="user?.twitter || 'https://x.com/godofproducts'"
-              v-model="twitter"
-              :errors="errors.twitter"
-            /> -->
-            <a
-              href="https://twitter.com/settings/screen_name"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="mt-3 inline-block text-sm font-normal underline"
+          <div
+            class="grid w-full gap-2 mt-5"
+            v-if="authStore.user?.role === Role.Specialist"
+          >
+            <Label for="bio"
+              >Tell us about your yourself
+              <span class="text-xs">(required)</span></Label
             >
-              Get your Twitter profile link
-            </a>
+            <Textarea
+              class="bg-white border-sec/25 rounded focus:ring-sec"
+              rows="10"
+              id="bio"
+              placeholder="Type your message here."
+              v-model="bio"
+            />
+            <p class="text-sm text-muted-foreground">
+              How would you like to be intro'd? Add a short bio.
+            </p>
           </div>
         </div>
       </section>
     </div>
 
     <div class="mx-auto mt-6 flex max-w-3xl flex-col gap-3">
-      <!-- <ButtonPri
-        :isLoading="isLoadingUpdate || isLoading || isSwagUploading"
-        :isDisabled="isLoading || isSwagUploading"
-        :spinner="<Spinner />"
+      <ButtonBase
+        :isLoading="isLoading"
         type="submit"
-        class="w-full"
-        @click="handleSubmit((d) => handleNext(d))"
+        loadingText="Please enter your email"
+        class="w-full mt-10"
+        @click="handleSubmit"
       >
-        Continue
-      </ButtonPri> -->
-      <ButtonSec
-        :isDisabled="isLoading || isLoadingUpdate || isSwagUploading"
-        class="inline-flex w-full rounded-lg bg-grey7 !py-0 px-3 text-sm font-medium hover:bg-grey1"
-      >
-        Back
-      </ButtonSec>
+        Finish
+        <template #spinner>
+          <SpinnerSm />
+        </template>
+      </ButtonBase>
+      <ButtonSec @click="handleGoBack" class="w-full mt-3"> Back </ButtonSec>
     </div>
   </section>
 </template>
