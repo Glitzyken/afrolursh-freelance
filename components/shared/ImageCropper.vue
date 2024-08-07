@@ -16,6 +16,7 @@ defineProps({
 const emits = defineEmits<{
   (e: "try-diff-photo"): void;
   (e: "close"): void;
+  (e: "save-btn-clicked"): void;
   (e: "crop-data", data: { imageBlob: Blob; image: string }): void;
 }>();
 
@@ -24,6 +25,7 @@ const handleTryDifferentPhoto = () => {
 };
 
 const handleGetCropData = () => {
+  emits("save-btn-clicked");
   const cropper = cropperRef.value;
 
   if (cropper) {
@@ -133,9 +135,10 @@ const handleCloseModal = () => {
                 Close
               </ButtonSec>
               <ButtonBase
+                class="w-full"
                 @click="handleGetCropData"
-                :isLoading="<boolean>isLoading"
-                :isDisabled="<boolean>isLoading"
+                :isLoading="isLoading"
+                :isDisabled="isLoading"
               >
                 Save Crop
                 <template #spinner>
@@ -147,7 +150,7 @@ const handleCloseModal = () => {
               <ButtonSec @click="handleCloseModal" class="text-white p-1">
                 Cancel
               </ButtonSec>
-              <ButtonBase @click="handleTryDifferentPhoto">
+              <ButtonBase class="w-full" @click="handleTryDifferentPhoto">
                 Try a different photo
               </ButtonBase>
             </div>

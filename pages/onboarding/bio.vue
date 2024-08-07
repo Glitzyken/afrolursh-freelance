@@ -16,10 +16,15 @@ const closeModal = () => {
   isModalCropOpen.value = false;
 };
 
+const saveBtnClicked = () => {
+  isLoading.value = true;
+};
+
 const getCropData = (data: { imageBlob: Blob; image: string }) => {
   image.value = data.image;
   imageBlob.value = data.imageBlob;
   isModalCropOpen.value = false;
+  isLoading.value = false;
 
   console.log(imageBlob.value);
 };
@@ -66,7 +71,7 @@ const handleImageChange = (e: Event) => {
   const file = target.files ? target.files[0] : null;
 
   if (file) {
-    if (convertBytesToMB(file.size) > MAX_FILE_SIZE) {
+    if (convertBytesToMB(file.size) >= MAX_FILE_SIZE) {
       clearPhoto(e);
       fileSizeError.value = true;
     } else {
@@ -91,6 +96,7 @@ const handleSubmit = (callback: any) => {
       @close="closeModal"
       @crop-data="getCropData"
       @try-diff-photo="pickPhoto"
+      @save-btn-clicked="saveBtnClicked"
     />
 
     <div class="mx-auto mb-6 mt-9 sm:mb-8 sm:mt-16 sm:w-[520px] sm:text-center">
