@@ -5,7 +5,7 @@ const imageBlob = ref();
 const inputFile = ref<HTMLInputElement | null>(null);
 const isModalCropOpen = ref(false);
 const fileSizeError = ref(false);
-const dragging = ref(false);
+const isDragging = ref(false);
 const isLoadingUpdate = ref(false);
 const isLoading = ref(false);
 const isSwagUploading = ref(false);
@@ -37,17 +37,39 @@ const pickPhoto = () => {
   isModalCropOpen.value = false;
 };
 
-const handleDragEnter = () => {
-  /* your logic here */
+const handleDragEnter = (e: DragEvent) => {
+  e.preventDefault();
+  e.stopPropagation();
+  isDragging.value = true;
 };
-const handleDragLeave = () => {
-  /* your logic here */
+const handleDragLeave = (e: DragEvent) => {
+  e.preventDefault();
+  e.stopPropagation();
+  isDragging.value = false;
 };
-const handleDragOver = () => {
-  /* your logic here */
+const handleDragOver = (e: DragEvent) => {
+  e.preventDefault();
+  e.stopPropagation();
+  isDragging.value = true;
 };
-const handleDrop = () => {
-  /* your logic here */
+const handleDrop = (e: DragEvent) => {
+  e.preventDefault();
+  e.stopPropagation();
+  isDragging.value = false;
+
+  const file = e?.dataTransfer?.files[0];
+
+  if (file) {
+    if (convertBytesToMB(file.size) >= MAX_FILE_SIZE) {
+      clearPhoto(e);
+      fileSizeError.value = true;
+    } else {
+      fileSizeError.value = false;
+      cropperImage.value = URL.createObjectURL(file);
+    }
+  } else {
+    console.error("No files found in dataTransfer");
+  }
 };
 
 const clearPhoto = (e?: Event) => {
@@ -131,8 +153,8 @@ const handleSubmit = (callback: any) => {
               @dragleave="handleDragLeave"
               @dragover="handleDragOver"
               @drop="handleDrop"
-              :class="`flex h-[380px] flex-col rounded border-2 border-dashed bg-dark px-30x shadow ${
-                dragging ? 'border-white' : 'border-grey2'
+              :class="`flex h-[380px] flex-col rounded border-2 border-dashed px-30x shadow ${
+                isDragging ? 'border-white' : 'border-grey1'
               }`"
             >
               <div class="mb-6 mt-28">
@@ -140,12 +162,8 @@ const handleSubmit = (callback: any) => {
                   <div class="h-10 w-10">
                     <Icon name="solar:upload-bold" size="40" class="text-sec" />
                   </div>
-                  <p
-                    class="mt-4 text-center text-sm tracking-wider text-whitest"
-                  >
-                    <span
-                      class="mb-8x block text-base font-semibold sm:text-lg"
-                    >
+                  <p class="mt-4 text-center text-sm tracking-wider">
+                    <span class="mb-8x block font-semibold sm:text-lg">
                       Drag your photo here
                     </span>
                     <span class="text-sm font-normal">
@@ -173,13 +191,6 @@ const handleSubmit = (callback: any) => {
             </div>
           </label>
         </div>
-        <!-- <button
-          class="mt-4 inline-flex items-center gap-1.5 text-sm text-grey9 underline transition-all"
-          @click="() => setOpen(true)"
-        >
-          <Info class="text-grey6" size="18" />
-          Tips for uploading a good profile picture
-        </button> -->
       </section>
 
       <section class="sm:w-[400px]">
