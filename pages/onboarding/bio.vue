@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { languageFile } from "~/assets/data/languages";
+
 const cropperImage = ref<string>("");
 const image = ref<string>("");
 const imageBlob = ref();
@@ -9,7 +11,10 @@ const isDragging = ref(false);
 const isLoadingUpdate = ref(false);
 const isLoading = ref(false);
 const isSwagUploading = ref(false);
-const user = ref({});
+const languages = ref<string[]>(languageFile);
+const isDropdownSearch = ref(false);
+const selectedLanguages = ref(["English"]);
+let query = ref("");
 
 const closeModal = () => {
   clearPhoto();
@@ -103,6 +108,21 @@ const handleImageChange = (e: Event) => {
   }
 };
 
+let filteredLanguages = computed(() =>
+  query.value === ""
+    ? languages.value
+    : languages.value.filter((language) =>
+        language
+          .toLowerCase()
+          .replace(/\s+/g, "")
+          .includes(query.value.toLowerCase().replace(/\s+/g, ""))
+      )
+);
+
+const handeShowDropdownSearch = () => {
+  isDropdownSearch.value = !isDropdownSearch.value;
+};
+
 const handleSubmit = (callback: any) => {
   /* your logic here */
 };
@@ -194,33 +214,62 @@ const handleSubmit = (callback: any) => {
       </section>
 
       <section class="sm:w-[400px]">
-        <div class="flex flex-col gap-6">
-          <!-- <InputWithLabel
-            label="Portfolio or Personal Site"
-            id="portfolio"
-            placeholder="Behance, Dribbble, GitHub Profile link"
-            v-model="portfolio"
-            :errors="errors?.portfolio"
-          /> -->
-          <div>
-            <!-- <InputWithLabel
-              icon="<InputIconWrapper><LinkedInLogoIcon width='19' height='19' /></InputIconWrapper>"
-              label="LinkedIn URL"
-              :disabled="isLoadingUpdate || isLoading || isSwagUploading"
-              :placeholder="
-                user?.linkedin || 'https://linkedin.com/in/ejiro-asiuwhu'
-              "
-              v-model="linkedin"
-              :errors="errors?.linkedin"
-            /> -->
-            <a
-              href="https://www.linkedin.com/in/"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="mt-3 inline-block text-sm font-normal underline"
+        <div class="flex flex-col gap-6 relative">
+          <button
+            @click="handeShowDropdownSearch"
+            id="dropdownSearchButton"
+            data-dropdown-toggle="dropdownSearch"
+            class="flex justify-between bg-white border-2 border-sec/25 px-4 py-2 text-sm rounded focus:ring-1 focus:outline-none focus:ring-sec"
+            type="button"
+          >
+            {{ selectedLanguages?.join(",") }} ({{ selectedLanguages?.length }})
+            <Icon name="formkit:down" size="20" class="text-sec" />
+          </button>
+
+          <!-- Dropdown menu -->
+          <div
+            v-if="isDropdownSearch"
+            id="dropdownSearch"
+            class="z-10 bg-white rounded shadow w-full absolute top-14"
+          >
+            <div class="p-3">
+              <label for="input-group-search" class="sr-only">Search</label>
+              <div class="relative">
+                <div
+                  class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none"
+                >
+                  <Icon name="icomoon-free:search" size="20" class="text-sec" />
+                </div>
+                <input
+                  v-model="query"
+                  type="text"
+                  id="input-group-search"
+                  class="bg-white border-2 border-sec/25 text-sec text-sm rounded focus:ring-sec focus:border-sec block w-full ps-10 p-2.5"
+                  placeholder="Search language"
+                />
+              </div>
+            </div>
+            <ul
+              class="h-48 px-3 pb-3 overflow-y-auto text-sm text-sec"
+              aria-labelledby="dropdownSearchButton"
             >
-              Get your LinkedIn profile link
-            </a>
+              <li v-for="language in filteredLanguages">
+                <div class="flex items-center p-2 rounded hover:bg-gray-100">
+                  <input
+                    :id="language"
+                    type="checkbox"
+                    :value="language"
+                    v-model="selectedLanguages"
+                    class="w-4 h-4 text-pri bg-gray-100 border-sec/25 rounded focus:ring-sec"
+                  />
+                  <label
+                    :for="language"
+                    class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
+                    >{{ language }}</label
+                  >
+                </div>
+              </li>
+            </ul>
           </div>
 
           <div>
