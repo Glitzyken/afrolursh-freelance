@@ -144,6 +144,11 @@ const handeShowDropdownSearch = () => {
 };
 
 const handleSubmit = async () => {
+  let payload: any = {
+    languages: selectedLanguages.value,
+    onboardingStep: 4,
+  };
+
   if (authStore.user?.role === Role.Specialist) {
     if (!imageFormData.value) {
       errors.value.push("photo");
@@ -154,15 +159,11 @@ const handleSubmit = async () => {
     }
 
     if (errors.value.length) return;
+
+    payload["bio"] = bio.value;
   }
 
   isLoading.value = true;
-
-  const payload = {
-    languages: selectedLanguages.value,
-    bio: bio.value,
-    onboardingStep: 4,
-  };
 
   const uploaded = await API.user.updateMyPhoto(
     imageFormData.value as FormData
