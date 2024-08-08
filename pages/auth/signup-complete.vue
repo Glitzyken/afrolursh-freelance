@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useForm } from "vee-validate";
-import type { CountryCode } from "maz-ui/components/MazPhoneNumberInput";
 import { useAuthStore } from "@/store/auth";
 import { vAutoAnimate } from "@formkit/auto-animate/vue";
 import { Input } from "@/components/ui/input";
@@ -12,7 +11,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { API } from "~/services";
-import { countryCodesNotSupported } from "~/assets/data/countryCodes";
 
 const authStore = useAuthStore();
 const emailInput = ref("");
@@ -23,8 +21,8 @@ definePageMeta({
 
 const isLoading = ref(false);
 const phoneNumber = ref("");
-const countryCode = ref("GB");
-const phoneNumberInputResults = ref();
+const countryCode = ref<"+44" | "+234">("+44");
+const showPhoneDropdown = ref(false);
 
 const email = useRoute().query?.email as string;
 emailInput.value = email;
@@ -33,9 +31,15 @@ const { handleSubmit } = useForm({
   validationSchema: completeSignupSchema,
 });
 
+const getPhoneNumber = () => {
+  if (!phoneNumber.value) return "";
+  const result = phoneNumber.value.substring(1);
+  return countryCode.value + result;
+};
+
 const onSubmit = handleSubmit(async (values) => {
   isLoading.value = true;
-  values.phone = phoneNumber.value;
+  values.phone = getPhoneNumber();
 
   const user = await API.auth.completeSignup(
     {
@@ -68,6 +72,11 @@ const onSubmit = handleSubmit(async (values) => {
     }
   }
 });
+
+const handleCountryCodeSelected = (code: "+44" | "+234") => {
+  countryCode.value = code;
+  showPhoneDropdown.value = false;
+};
 </script>
 
 <template>
@@ -145,17 +154,68 @@ const onSubmit = handleSubmit(async (values) => {
                 <FormLabel>Phone</FormLabel>
               </div>
               <FormControl>
-                <MazPhoneNumberInput
-                  class="bg-white border-2 border-sec/25 w-full rounded-md"
-                  v-model="phoneNumber"
-                  v-model:country-code="countryCode as CountryCode"
-                  show-code-on-list
-                  :ignoredCountries="countryCodesNotSupported as CountryCode[]"
-                  :noSearch="true"
-                  :noExample="true"
-                  :countrySelectorWidth="'4rem'"
-                  @update="phoneNumberInputResults = $event"
-                />
+                <div class="flex items-center relative">
+                  <button
+                    @click="showPhoneDropdown = !showPhoneDropdown"
+                    id="dropdown-phone-button"
+                    data-dropdown-toggle="dropdown-phone"
+                    class="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center bg-white border-2 border-sec/25 rounded-md focus:ring-1 focus:outline-none focus:ring-sec/25"
+                    type="button"
+                  >
+                    <UnitedKingdomFlag v-if="countryCode === '+44'" />
+                    <NigeriaFlag v-if="countryCode === '+234'" />
+                    {{ countryCode }}
+                    <Icon name="formkit:down" size="20" class="text-sec" />
+                  </button>
+                  <div
+                    v-if="showPhoneDropdown"
+                    id="dropdown-phone"
+                    class="z-10 bg-white divide-y divide-gray-100 rounded-md shadow w-full absolute top-12"
+                  >
+                    <ul
+                      class="py-2 text-sm"
+                      aria-labelledby="dropdown-phone-button"
+                    >
+                      <li>
+                        <button
+                          @click="handleCountryCodeSelected('+44')"
+                          type="button"
+                          class="inline-flex w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          role="menuitem"
+                        >
+                          <div class="inline-flex items-center">
+                            <UnitedKingdomFlag />
+                            United Kingdom (+44)
+                          </div>
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          @click="handleCountryCodeSelected('+234')"
+                          type="button"
+                          class="inline-flex w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          role="menuitem"
+                        >
+                          <div class="inline-flex items-center">
+                            <NigeriaFlag />
+                            Nigeria (+234)
+                          </div>
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="relative w-full">
+                    <input
+                      v-model="phoneNumber"
+                      type="phone"
+                      id="phone-input"
+                      class="block p-2.5 w-full z-20 text-sm bg-white rounded-md border-s-0 border-2 border-sec/25"
+                      pattern="^0(7[0-9]{9}|[1-9][0-9]{8,9})$"
+                      placeholder="e.g 0803XXXXXXX or 020XXXXXXX"
+                      required
+                    />
+                  </div>
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>

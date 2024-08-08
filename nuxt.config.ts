@@ -9,7 +9,6 @@ export default defineNuxtConfig({
     "@vueuse/motion/nuxt",
     "@pinia/nuxt",
     "nuxt-icon",
-    "maz-ui/nuxt",
     "nuxt-headlessui",
   ],
   components: [
