@@ -97,6 +97,7 @@ watch(formValues, (newValue) => {
 </script>
 
 <template>
+  <div v-motion-fade class="w-3/4 h-[0.3rem] rounded-lg mb-5 bg-pri"></div>
   <section class="section mt-10 w-96 m-auto">
     <h1 class="text-center short-title">
       Love it! <br />

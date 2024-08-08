@@ -195,6 +195,7 @@ watch(bio, (val) => {
 </script>
 
 <template>
+  <div v-motion-fade class="w-4/4 h-[0.3rem] rounded-lg mb-5 bg-pri"></div>
   <section class="px-6 pb-16 overflow">
     <ImageCropper
       :isModalCropOpen="isModalCropOpen"

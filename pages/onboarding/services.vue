@@ -65,6 +65,7 @@ const handleGoBack = () => {
 </script>
 
 <template>
+  <div v-motion-fade class="w-2/4 h-[0.3rem] rounded-lg mb-5 bg-pri"></div>
   <section class="section mt-10 w-full md:w-3/4 lg:w-2/4 m-auto">
     <h1 class="text-center short-title">
       Nice to meet you! <br />
