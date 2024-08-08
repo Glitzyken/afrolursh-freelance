@@ -11,8 +11,8 @@ import { useAuthStore } from "@/store/auth";
           <p class="text-3xl leading-1">when you meet the right hairdresser.</p>
 
           <p class="mt-4 text-xl">
-            They needs you, make impact in the life of people.
-            <span class="font-bold">Become a mentor</span>
+            They need you, make impact in the life of people.
+            <span class="font-bold">Become a specialist</span>
           </p>
         </div>
         <div>
@@ -33,39 +33,14 @@ import { useAuthStore } from "@/store/auth";
                       class="h-64 w-44 overflow-hidden rounded-lg sm:opacity-0 lg:opacity-100"
                     >
                       <img
-                        src="https://tailwindui.com/img/ecommerce-images/home-page-03-hero-image-tile-01.jpg"
+                        src="../assets/img/1.jpg"
                         alt=""
                         class="h-full w-full object-cover object-center"
                       />
                     </div>
                     <div class="h-64 w-44 overflow-hidden rounded-lg">
                       <img
-                        src="https://tailwindui.com/img/ecommerce-images/home-page-03-hero-image-tile-02.jpg"
-                        alt=""
-                        class="h-full w-full object-cover object-center"
-                      />
-                    </div>
-                  </div>
-                  <div
-                    class="grid flex-shrink-0 grid-cols-1 gap-y-6 lg:gap-y-8"
-                  >
-                    <div class="h-64 w-44 overflow-hidden rounded-lg">
-                      <img
-                        src="https://tailwindui.com/img/ecommerce-images/home-page-03-hero-image-tile-03.jpg"
-                        alt=""
-                        class="h-full w-full object-cover object-center"
-                      />
-                    </div>
-                    <div class="h-64 w-44 overflow-hidden rounded-lg">
-                      <img
-                        src="https://tailwindui.com/img/ecommerce-images/home-page-03-hero-image-tile-04.jpg"
-                        alt=""
-                        class="h-full w-full object-cover object-center"
-                      />
-                    </div>
-                    <div class="h-64 w-44 overflow-hidden rounded-lg">
-                      <img
-                        src="https://tailwindui.com/img/ecommerce-images/home-page-03-hero-image-tile-05.jpg"
+                        src="../assets/img/2.jpg"
                         alt=""
                         class="h-full w-full object-cover object-center"
                       />
@@ -76,14 +51,39 @@ import { useAuthStore } from "@/store/auth";
                   >
                     <div class="h-64 w-44 overflow-hidden rounded-lg">
                       <img
-                        src="https://tailwindui.com/img/ecommerce-images/home-page-03-hero-image-tile-06.jpg"
+                        src="../assets/img/4.jpg"
                         alt=""
                         class="h-full w-full object-cover object-center"
                       />
                     </div>
                     <div class="h-64 w-44 overflow-hidden rounded-lg">
                       <img
-                        src="https://tailwindui.com/img/ecommerce-images/home-page-03-hero-image-tile-07.jpg"
+                        src="../assets/img/5.jpg"
+                        alt=""
+                        class="h-full w-full object-cover object-center"
+                      />
+                    </div>
+                    <div class="h-64 w-44 overflow-hidden rounded-lg">
+                      <img
+                        src="../assets/img/7.jpg"
+                        alt=""
+                        class="h-full w-full object-cover object-center"
+                      />
+                    </div>
+                  </div>
+                  <div
+                    class="grid flex-shrink-0 grid-cols-1 gap-y-6 lg:gap-y-8"
+                  >
+                    <div class="h-64 w-44 overflow-hidden rounded-lg">
+                      <img
+                        src="../assets/img/3.jpg"
+                        alt=""
+                        class="h-full w-full object-cover object-center"
+                      />
+                    </div>
+                    <div class="h-64 w-44 overflow-hidden rounded-lg">
+                      <img
+                        src="../assets/img/6.jpg"
                         alt=""
                         class="h-full w-full object-cover object-center"
                       />
