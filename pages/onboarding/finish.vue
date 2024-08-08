@@ -23,7 +23,7 @@ const handleSecBtn = () => {
       class="w-96 mx-auto"
     />
 
-    <div class="flex items-center gap-4">
+    <div class="md:flex md:items-center md:gap-4">
       <ButtonSec @click="handleSecBtn" class="w-full">
         Book a specialist
       </ButtonSec>
@@ -32,7 +32,7 @@ const handleSecBtn = () => {
         @click="handleBaseBtn"
         type="submit"
         loadingText="Please enter your email"
-        class="w-full"
+        class="w-full mt-5 md:mt-0"
       >
         Go to dashboard
         <template #spinner>

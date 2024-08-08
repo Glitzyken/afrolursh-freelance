@@ -71,15 +71,15 @@ const onSubmit = handleSubmit(async (values) => {
 </script>
 
 <template>
-  <section class="section mt-10">
-    <div class="w-96 m-auto">
+  <section class="section mt-10 md:w-96 m-auto">
+    <div class="w-full m-auto">
       <h1 class="text-center short-title">
         Welcome! <br />
         Let's get to know you
       </h1>
     </div>
 
-    <div class="w-96 m-auto">
+    <div class="w-full m-auto">
       <ClientOnly>
         <form class="mt-10 space-y-4" @submit="onSubmit">
           <FormField v-slot="{ componentField }" name="firstName">
